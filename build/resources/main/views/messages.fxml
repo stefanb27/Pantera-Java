@@ -31,7 +31,7 @@
    <center>
       <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #697184;" BorderPane.alignment="CENTER">
          <columns>
-            <TableColumn prefWidth="75.0" text="(pic)" visible="false" />
+            <TableColumn fx:id="id" prefWidth="75.0" text="(pic)" visible="false" />
             <TableColumn fx:id="firstNameColumn" prefWidth="71.99999845027924" text="First name" />
             <TableColumn fx:id="lastNameColumn" prefWidth="92.79999542236328" text="Last name" />
             <TableColumn fx:id="messageColumn" prefWidth="279.20001220703125" text="Message" />

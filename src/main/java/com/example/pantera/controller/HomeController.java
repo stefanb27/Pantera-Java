@@ -51,25 +51,25 @@ public class HomeController {
     }
 
     public void handleMessageButton() {
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(getClass().getResource("/notifications.fxml"));
-//
-//        try {
-//            BorderPane root = (BorderPane) loader.load();
-//            Stage dialogStage = new Stage();
-//            dialogStage.setTitle("Inbox");
-//            dialogStage.initModality(Modality.WINDOW_MODAL);
-//            //dialogStage.initOwner(primaryStage);
-//            Scene scene = new Scene(root);
-//            dialogStage.setScene(scene);
-//
-//            HomeController userViewController = loader.getController();
-//            userViewController.setService(dialogStage, user);
-//            dialogStage.show();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/inbox.fxml"));
+
+        try {
+            BorderPane root = (BorderPane) loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Inbox");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            //dialogStage.initOwner(primaryStage);
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            InboxController userViewController = loader.getController();
+            userViewController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
