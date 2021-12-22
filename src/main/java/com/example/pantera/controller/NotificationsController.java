@@ -1,7 +1,6 @@
 package com.example.pantera.controller;
 
-import com.example.pantera.domain.Friendship;
-import com.example.pantera.domain.Tuple;
+import com.example.pantera.domain.*;
 import com.example.pantera.events.FriendshipChangeEvent;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -17,8 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import com.example.pantera.domain.Connection;
-import com.example.pantera.domain.User;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
 import com.example.pantera.repository.db.FriendshipDBRepository;
@@ -46,7 +43,7 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
 
     private Stage dialogStage;
     private User user;
-    private final ObservableList<User> friendshipsModel = FXCollections.observableArrayList();
+    private final ObservableList<NotificationsWrapper> friendshipsModel = FXCollections.observableArrayList();
 
     @FXML
     private Button backButton;
@@ -55,15 +52,15 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     @FXML
     private Button deleteButton;
     @FXML
-    private TableView<User> tableView;
+    private TableView<NotificationsWrapper> tableView;
     @FXML
-    private TableColumn<User, String> id;
+    private TableColumn<NotificationsWrapper, String> id;
     @FXML
-    private TableColumn<User, String> firstNameColumn;
+    private TableColumn<NotificationsWrapper, String> firstNameColumn;
     @FXML
-    private TableColumn<User, String> lastNameColumn;
+    private TableColumn<NotificationsWrapper, String> lastNameColumn;
     @FXML
-    private TableColumn<User, String> dateColumn;
+    private TableColumn<NotificationsWrapper, String> dateColumn;
 
     @FXML
     private void initialize() {
@@ -85,10 +82,12 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     }
     private void uploadData() {
         List<Friendship> requests = friendshipService.getAllRequest(user.getId());
-        List<User> result = requests.stream().map(x -> {
-            return userService.findUser(x.getId().getLeft());
+        List<NotificationsWrapper> result = requests.stream().map(x -> {
+            User user = userService.findUser(x.getId().getLeft());
+            return new NotificationsWrapper(user.getId(), user.getFirstName(), user.getLastName(),
+                    x.getDateTime());
         }).collect(Collectors.toList());
-        List<User> messageTaskList = StreamSupport.stream(result.spliterator(), false)
+        List<NotificationsWrapper> messageTaskList = StreamSupport.stream(result.spliterator(), false)
                 .collect(Collectors.toList());
         friendshipsModel.setAll(messageTaskList);
         tableView.setItems(friendshipsModel);
