@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="698.0" prefWidth="444.0" style="-fx-background-color: #F7F7F7;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.HomeController">
+   <top>
+      <AnchorPane prefHeight="74.0" prefWidth="422.0" style="-fx-border-style: solid; -fx-border-color: #7DA2A9;" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="messageButton" layoutX="372.0" layoutY="4.0" mnemonicParsing="false" onAction="#handleMessageButton" prefHeight="65.0" prefWidth="71.0" text="MSG">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font></Button>
+            <Button fx:id="requestsButton" layoutX="293.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleRequestsButton" prefHeight="64.0" prefWidth="73.0" text="Requests">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font></Button>
+            <Label layoutX="27.0" layoutY="21.0" prefHeight="18.0" prefWidth="165.0" text="Pantera" textFill="#7da2a9">
+               <font>
+                  <Font name="Arial" size="28.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </top>
+   <bottom>
+      <AnchorPane prefHeight="71.0" prefWidth="444.0" style="-fx-border-style: solid; -fx-border-color: #7DA2A9;" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="homeButton" layoutX="14.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleHomeButton" prefHeight="57.0" prefWidth="78.0" text="home">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font></Button>
+            <Button fx:id="searchButton" layoutX="181.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleSearchButton" prefHeight="59.0" prefWidth="78.0" text="search">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font></Button>
+            <Button fx:id="profileButton" layoutX="353.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleProfileButton" prefHeight="54.0" prefWidth="75.0" text="Profile">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font></Button>
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>
