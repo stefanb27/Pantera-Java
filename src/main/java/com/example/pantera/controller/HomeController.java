@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,15 +32,17 @@ public class HomeController {
     private User user;
 
     @FXML
+    private ScrollPane feed;
+    @FXML
     private Button messageButton;
     @FXML
-    private Button homeButton;
+    private ImageView homeButton;
     @FXML
-    private Button searchButton;
+    private ImageView searchButton;
     @FXML
-    private Button profileButton;
+    private ImageView profileButton;
     @FXML
-    private Button requestsButton;
+    private ImageView notificationsButton;
 
     @FXML
     private void initialize() {
@@ -77,51 +82,6 @@ public class HomeController {
 
     }
 
-    public void handleSearchButton() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/search.fxml"));
-
-        try {
-            BorderPane root = (BorderPane) loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Search");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            SearchController userViewController = loader.getController();
-            userViewController.setService(dialogStage, user);
-            dialogStage.show();
-            this.dialogStage.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void handleProfileButton() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/profile.fxml"));
-
-        try {
-            BorderPane root = (BorderPane) loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("My profile");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            ProfileController userViewController = loader.getController();
-            userViewController.setService(dialogStage, user);
-            dialogStage.show();
-            this.dialogStage.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void handleRequestsButton() {
         FXMLLoader loader = new FXMLLoader();
@@ -140,6 +100,75 @@ public class HomeController {
             userViewController.setService(dialogStage, user);
             dialogStage.show();
             this.dialogStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleNotificationsButton() {
+        toNotifications();
+    }
+
+    public void toNotifications(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/notifications.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Notifications");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            NotificationsController notificationsController = loader.getController();
+            notificationsController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleSearchButton() {
+        toSearch();
+    }
+
+    public void toSearch(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/search.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Search");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            SearchController searchController = loader.getController();
+            searchController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleProfileButton() {
+        toProfile();
+    }
+
+    public void toProfile(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/profile.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Profile");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            ProfileController profileController = loader.getController();
+            profileController.setService(dialogStage, user);
+            dialogStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

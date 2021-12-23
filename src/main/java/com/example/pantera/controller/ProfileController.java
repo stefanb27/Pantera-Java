@@ -1,9 +1,17 @@
 package com.example.pantera.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,7 +27,10 @@ import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
 
 import java.io.IOException;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class ProfileController {
     Connection connection = new Connection();
@@ -32,6 +43,13 @@ public class ProfileController {
 
     private Stage dialogStage;
     private User user;
+
+    @FXML
+    private ImageView searchButton;
+    @FXML
+    private ImageView homeButton;
+    @FXML
+    private ImageView notificationsButton;
 
     @FXML
     private Button backButton;
@@ -47,6 +65,15 @@ public class ProfileController {
     private Button tagsButton;
 
     @FXML
+    private Label firstName;
+
+    @FXML
+    private Label lastName;
+
+    @FXML
+    private ListView<User> friends;
+
+    @FXML
     private void initialize() {
     }
 
@@ -54,8 +81,20 @@ public class ProfileController {
     public void setService(Stage dialogStage, User user) {
         this.dialogStage = dialogStage;
         this.user = user;
-        List<User> result = (List<User>) friendshipService.getAllFriends(user.getId());
-        friendsButton.setText(result.size() + "");
+        firstName.setText(user.getFirstName());
+        lastName.setText(user.getLastName());
+
+        ObservableList<User> myFriendsModel = FXCollections.observableArrayList();
+        Iterable<User> all = friendshipService.getAllFriends(user.getId());
+        List<User> messageTaskList = StreamSupport.stream(all.spliterator(), false)
+                .collect(Collectors.toList());
+        myFriendsModel.setAll(messageTaskList);
+        friends.setItems(myFriendsModel);
+
+//        ObservableList<User> model = (ObservableList<User>) friendshipService.getAllFriends(user.getId());
+//        List<User> result = (List<User>) friendshipService.getAllFriends(user.getId());
+//        friends.setItems(model);
+//        friendsButton.setText(result.size() + "");
     }
 
     public void handleFriendsButton() {
@@ -74,7 +113,7 @@ public class ProfileController {
             FriendsController userViewController = loader.getController();
             userViewController.setService(dialogStage, user);
             dialogStage.show();
-            this.dialogStage.close();
+            //this.dialogStage.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -98,10 +137,80 @@ public class ProfileController {
             HomeController userViewController = loader.getController();
             userViewController.setService(dialogStage, user);
             dialogStage.show();
-            this.dialogStage.close();
+            //this.dialogStage.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public void handleNotificationsButton() {
+        toNotifications();
+    }
+
+    public void toNotifications(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/notifications.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Notifications");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            NotificationsController notificationsController = loader.getController();
+            notificationsController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleSearchButton() {
+        toSearch();
+    }
+
+    public void toSearch(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/search.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Search");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            SearchController searchController = loader.getController();
+            searchController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleHomeButton() {
+        toHome();
+    }
+
+    public void toHome(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/home.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Home");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            HomeController homeController = loader.getController();
+            homeController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -41,18 +41,18 @@
          </children>
       </Pane>
 
-      <Button fx:id="logInButton" layoutX="111.0" layoutY="392.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="41.0" prefWidth="178.0" style="" stylesheets="@../../../../../mangusta/src/main/resources/com/example/mangusta/buttonLOGIN.css" text="LOG IN">
+      <Button fx:id="logInButton" layoutX="111.0" layoutY="392.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefHeight="41.0" prefWidth="178.0" style="" stylesheets="@../cssStyle/buttonLOGIN.css" text="LOG IN">
          <font>
             <Font name="Dubai Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="forgotPasswordButton" layoutX="141.0" layoutY="434.0" mnemonicParsing="false" onAction="#onForgotPasswordClick" prefHeight="0.0" prefWidth="116.0" style="-fx-background-color: #1F1A30;" stylesheets="@../../../../../mangusta/src/main/resources/com/example/mangusta/buttonsText.css" text="Forgot password?" textFill="#0df6e3">
+      <Button fx:id="forgotPasswordButton" layoutX="141.0" layoutY="434.0" mnemonicParsing="false" onAction="#onForgotPasswordClick" prefHeight="0.0" prefWidth="116.0" style="-fx-background-color: #1F1A30;" stylesheets="@../cssStyle/buttonsText.css" text="Forgot password?" textFill="#0df6e3">
          <font>
             <Font name="Dubai Regular" size="12.0" />
          </font>
       </Button>
       <Text fill="#797484" layoutX="111.0" layoutY="509.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't have an account?" wrappingWidth="150.13671112060547" />
-      <Button fx:id="signUpButton" layoutX="238.0" layoutY="490.0" mnemonicParsing="false" onAction="#onSignUpButtonClick" prefHeight="30.0" prefWidth="59.0" style="-fx-background-color: #1F1A30;" stylesheets="@../../../../../mangusta/src/main/resources/com/example/mangusta/buttonsText.css" text="Sign up" textFill="#0df6e3">
+      <Button fx:id="signUpButton" layoutX="238.0" layoutY="490.0" mnemonicParsing="false" onAction="#onSignUpButtonClick" prefHeight="30.0" prefWidth="59.0" style="-fx-background-color: #1F1A30;" stylesheets="@../cssStyle/buttonsText.css" text="Sign up" textFill="#0df6e3">
          <font>
             <Font name="Dubai Regular" size="12.0" />
          </font>
@@ -62,9 +62,9 @@
             <Font size="8.0" />
          </font>
       </Text>
-      <ImageView fitHeight="150.0" fitWidth="129.0" layoutX="141.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="129.0" fitWidth="142.0" layoutX="135.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../mangusta/src/main/resources/com/example/mangusta/logoMangusta.png" />
+            <Image url="@../images/bpanther.png" />
          </image>
       </ImageView>
    </children>

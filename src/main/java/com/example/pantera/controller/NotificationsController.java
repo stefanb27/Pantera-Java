@@ -13,6 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -44,6 +47,14 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     private Stage dialogStage;
     private User user;
     private final ObservableList<NotificationsWrapper> friendshipsModel = FXCollections.observableArrayList();
+
+
+    @FXML
+    private ImageView searchButton;
+    @FXML
+    private ImageView homeButton;
+    @FXML
+    private ImageView profileButton;
 
     @FXML
     private Button backButton;
@@ -129,5 +140,77 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     public void handleDeleteButton() {
         Long id = tableView.getSelectionModel().getSelectedItem().getId();
         friendshipService.deleteFriendship(user.getId(), id);
+    }
+
+    public void handleSearchButton() {
+        toSearch();
+    }
+
+    public void toSearch(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/search.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Search");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            SearchController searchController = loader.getController();
+            searchController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleProfileButton() {
+        toProfile();
+    }
+
+    public void toProfile(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/profile.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Profile");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            ProfileController profileController = loader.getController();
+            profileController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleHomeButton() {
+        toHome();
+    }
+
+    public void toHome(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/home.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Home");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            HomeController homeController = loader.getController();
+            homeController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleNotificationsButton(MouseEvent mouseEvent) {
     }
 }

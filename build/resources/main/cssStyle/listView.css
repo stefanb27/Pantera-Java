@@ -1,0 +1,15 @@
+.list-view{
+    -fx-background-color: transparent;
+    -fx-background-radius: 20;
+    -fx-font-family: Dubai;
+    -fx-font-size: 14;
+    -fx-border-color: #0DF6E3FF;
+    -fx-border-radius: 20;
+}
+
+.list-view .list-cell{
+    -fx-background-color: transparent;
+    -fx-text-background-color: white;
+    -fx-text-fill: white;
+}
+

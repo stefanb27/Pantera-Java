@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -30,6 +31,8 @@ public class LogInController {
     MessageDBRepository messageDBRepository = new MessageDBRepository(connection);
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
 
+    Stage logInStage;
+
     @FXML
     private Button logInButton;
     @FXML
@@ -41,10 +44,14 @@ public class LogInController {
     @FXML
     private TextField passwordText;
 
+    public void setService(Stage stage){
+        this.logInStage = stage;
+    }
+
     @FXML
     private void initialize() {
-        usernameText.setText("god@gmail.com");
-        passwordText.setText("123");
+        usernameText.setText("john@gmail.com");
+        passwordText.setText("1");
     }
 
     public void onLoginButtonClick() {
@@ -64,17 +71,14 @@ public class LogInController {
         loader.setLocation(getClass().getResource("/views/home.fxml"));
 
         try {
-            BorderPane root = (BorderPane) loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("User Interface");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
+            AnchorPane root = loader.load();
+            logInStage.setTitle("User Interface");
             Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
+            logInStage.setScene(scene);
 
             HomeController userViewController = loader.getController();
-            userViewController.setService(dialogStage, user);
-            dialogStage.show();
+            userViewController.setService(logInStage, user);
+            logInStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="698.0" prefWidth="444.0" style="-fx-background-color: #697184;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.MessageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="698.0" prefWidth="444.0" style="-fx-background-color: #697184;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.InboxController">
    <top>
       <AnchorPane prefHeight="74.0" prefWidth="422.0" style="-fx-border-style: solid;" BorderPane.alignment="CENTER">
          <children>
@@ -29,7 +29,7 @@
       </AnchorPane>
    </bottom>
    <center>
-      <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #697184;" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableView" onMouseClicked="#handleMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #697184;" BorderPane.alignment="CENTER">
          <columns>
             <TableColumn fx:id="id" prefWidth="75.0" text="(pic)" visible="false" />
             <TableColumn fx:id="firstNameColumn" prefWidth="71.99999845027924" text="First name" />
