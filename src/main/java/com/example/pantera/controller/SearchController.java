@@ -1,7 +1,6 @@
 package com.example.pantera.controller;
 
 import com.example.pantera.domain.Connection;
-import com.example.pantera.domain.Tuple;
 import com.example.pantera.domain.User;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
@@ -18,17 +17,12 @@ import com.example.pantera.utils.SearchCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class SearchController implements Observer<FriendshipChangeEvent> {
     Connection connection = new Connection();
@@ -72,7 +66,7 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     }
 
     private void uploadData() {
-        List<User> model = controllerService.filterSearchList(user);
+        List<User> model = controllerService.searchListFilter(user);
         usersModel.setAll(model);
         listView.setCellFactory(param -> new SearchCell(user));
         listView.setItems(usersModel);
@@ -85,11 +79,9 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
 
     public void handleOnKeyTyped() {
         String textTyped = searchText.getText();
-        List<User> users = (List<User>) userService.getAllUsers();
-        List<User> result = users.stream().filter(x -> !x.getId().equals(user.getId()) &&
-                (x.getFirstName().contains(textTyped) || x.getLastName().contains(textTyped))).collect(Collectors.toList());
-        usersModel.setAll(result);
-        //listView.setItems(usersModel);
+        List<User> users = controllerService.searchBoxFilter(user, textTyped);
+        usersModel.setAll(users);
+        listView.setItems(usersModel);
     }
 
     public void handleNotificationsButton() {

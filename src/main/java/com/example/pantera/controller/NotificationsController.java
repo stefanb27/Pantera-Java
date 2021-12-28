@@ -4,24 +4,11 @@ import com.example.pantera.domain.*;
 import com.example.pantera.events.FriendshipChangeEvent;
 import com.example.pantera.service.ControllerService;
 import com.example.pantera.utils.NotificationsCell;
-import com.example.pantera.utils.SearchCell;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
@@ -33,11 +20,7 @@ import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
 import com.example.pantera.utils.Observer;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class NotificationsController implements Observer<FriendshipChangeEvent> {
     Connection connection = new Connection();
@@ -77,7 +60,7 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
         uploadData();
     }
     private void uploadData() {
-        List<NotificationsWrapper> result = controllerService.filterNotifications(user);
+        List<NotificationsWrapper> result = controllerService.notificationsFilter(user);
         friendshipsModel.setAll(result);
         listView.setCellFactory(param -> new NotificationsCell(user));
         listView.setItems(friendshipsModel);
