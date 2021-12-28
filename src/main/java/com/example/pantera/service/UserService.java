@@ -113,10 +113,4 @@ public class UserService {
 //        }
 //        return maxim;
     }
-
-    public User checkEmail(String email) {
-        List<User> users = (List<User>) getAllUsers();
-        return users.stream().filter(u ->
-                u.getEmail().equals(email)).findAny().orElse(null);
-    }
 }

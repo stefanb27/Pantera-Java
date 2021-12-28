@@ -25,7 +25,7 @@
                   <Font name="Dubai Bold" size="16.0" />
                </font>
             </Text>
-            <ListView fx:id="friends" layoutX="34.0" layoutY="209.0" prefHeight="229.0" prefWidth="329.0" stylesheets="@../cssStyle/listView.css" />
+            <ListView fx:id="listView" layoutX="34.0" layoutY="209.0" prefHeight="229.0" prefWidth="329.0" stylesheets="@../cssStyle/listView.css" />
             <Label fx:id="firstName" alignment="CENTER_RIGHT" layoutX="115.0" layoutY="84.0" prefHeight="17.0" prefWidth="53.0" textFill="WHITE">
                <font>
                   <Font name="Dubai Regular" size="16.0" />

@@ -50,9 +50,9 @@ public class FriendshipService extends Observable<FriendshipChangeEvent> {
         if(friendSave == null){
             notifyObservers(new FriendshipChangeEvent(ChangeEventType.ADD, (Friendship) friendSave));
         }
-        User user1 = repositoryUser.findOne(id1);
-        User user2 = repositoryUser.findOne(id2);
-        user2.addFriend(user2); user1.addFriend(user1);
+//        User user1 = repositoryUser.findOne(id1);
+//        User user2 = repositoryUser.findOne(id2);
+//        user2.addFriend(user2); user1.addFriend(user1);
     }
 
     /**
@@ -72,8 +72,8 @@ public class FriendshipService extends Observable<FriendshipChangeEvent> {
             notifyObservers(new FriendshipChangeEvent(ChangeEventType.DELETE, (Friendship) friendSave));
         }
         if(friendSave == null) throw new ValidateException("Ids are not in any friendship");
-        repositoryUser.findOne(id1).removeFriend(repositoryUser.findOne(id2));
-        repositoryUser.findOne(id2).removeFriend(repositoryUser.findOne(id1));
+//        repositoryUser.findOne(id1).removeFriend(repositoryUser.findOne(id2));
+//        repositoryUser.findOne(id2).removeFriend(repositoryUser.findOne(id1));
     }
 
     /**
