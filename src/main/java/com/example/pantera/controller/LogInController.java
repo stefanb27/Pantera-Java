@@ -1,5 +1,6 @@
 package com.example.pantera.controller;
 
+import com.example.pantera.service.ControllerService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -30,7 +31,7 @@ public class LogInController {
     FriendshipService friendshipService = new FriendshipService(userDBRepository, friendshipDBRepository, new FriendshipValidator());
     MessageDBRepository messageDBRepository = new MessageDBRepository(connection);
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
-
+    ControllerService controllerService = new ControllerService(userDBRepository, friendshipDBRepository, messageDBRepository, connection);
     Stage logInStage;
 
     @FXML
@@ -50,14 +51,16 @@ public class LogInController {
 
     @FXML
     private void initialize() {
-        usernameText.setText("john@gmail.com");
-        passwordText.setText("1");
+        usernameText.setText("god@gmail.com");
+        passwordText.setText("123");
     }
 
     public void onLoginButtonClick() {
-        String email = usernameText.getText().toString();
-        User user = userService.checkEmail(email);
-        if (user == null || (!user.getEmail().equals(email) && !passwordText.getText().toString().equals(user.getPassword()))) {
+        String email = usernameText.getText();
+        String password = passwordText.getText();
+        User user = controllerService.checkLogIn(email, password);
+        System.out.println(user);
+        if (user == null) {
             usernameText.setText("");
             passwordText.setText("");
             usernameText.setPromptText("Invalid login credentials");
@@ -67,22 +70,8 @@ public class LogInController {
     }
 
     public void runUser(User user){
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/home.fxml"));
-
-        try {
-            AnchorPane root = loader.load();
-            logInStage.setTitle("User Interface");
-            Scene scene = new Scene(root);
-            logInStage.setScene(scene);
-
-            HomeController userViewController = loader.getController();
-            userViewController.setService(logInStage, user);
-            logInStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MenuButtonsController menuButtonsController = new MenuButtonsController(logInStage, user);
+        menuButtonsController.moveToHomeButton();
     }
 
     public void onSignUpButtonClick() {

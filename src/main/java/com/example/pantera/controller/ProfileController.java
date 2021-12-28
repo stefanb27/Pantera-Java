@@ -1,15 +1,14 @@
 package com.example.pantera.controller;
 
+import com.example.pantera.utils.ProfileCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -27,7 +26,6 @@ import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
 
 import java.io.IOException;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -40,6 +38,9 @@ public class ProfileController {
     FriendshipService friendshipService = new FriendshipService(userDBRepository, friendshipDBRepository, new FriendshipValidator());
     MessageDBRepository messageDBRepository = new MessageDBRepository(connection);
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
+    MenuButtonsController menuButtonsController;
+
+    ObservableList<User> myFriendsModel = FXCollections.observableArrayList();
 
     private Stage dialogStage;
     private User user;
@@ -50,9 +51,6 @@ public class ProfileController {
     private ImageView homeButton;
     @FXML
     private ImageView notificationsButton;
-
-    @FXML
-    private Button backButton;
     @FXML
     private Button editProfileButton;
     @FXML
@@ -63,15 +61,12 @@ public class ProfileController {
     private Button myPostsButton;
     @FXML
     private Button tagsButton;
-
     @FXML
     private Label firstName;
-
     @FXML
     private Label lastName;
-
     @FXML
-    private ListView<User> friends;
+    private ListView<User> listView;
 
     @FXML
     private void initialize() {
@@ -81,136 +76,26 @@ public class ProfileController {
     public void setService(Stage dialogStage, User user) {
         this.dialogStage = dialogStage;
         this.user = user;
+        this.menuButtonsController = new MenuButtonsController(dialogStage, user);
         firstName.setText(user.getFirstName());
         lastName.setText(user.getLastName());
-
-        ObservableList<User> myFriendsModel = FXCollections.observableArrayList();
         Iterable<User> all = friendshipService.getAllFriends(user.getId());
         List<User> messageTaskList = StreamSupport.stream(all.spliterator(), false)
                 .collect(Collectors.toList());
+        listView.setCellFactory(param -> new ProfileCell(user));
         myFriendsModel.setAll(messageTaskList);
-        friends.setItems(myFriendsModel);
-
-//        ObservableList<User> model = (ObservableList<User>) friendshipService.getAllFriends(user.getId());
-//        List<User> result = (List<User>) friendshipService.getAllFriends(user.getId());
-//        friends.setItems(model);
-//        friendsButton.setText(result.size() + "");
-    }
-
-    public void handleFriendsButton() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/friends.fxml"));
-
-        try {
-            BorderPane root = (BorderPane) loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("User Interface");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            FriendsController userViewController = loader.getController();
-            userViewController.setService(dialogStage, user);
-            dialogStage.show();
-            //this.dialogStage.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void handleBackButton() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/home.fxml"));
-
-        try {
-            BorderPane root = (BorderPane) loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("User Interface");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            HomeController userViewController = loader.getController();
-            userViewController.setService(dialogStage, user);
-            dialogStage.show();
-            //this.dialogStage.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        listView.setItems(myFriendsModel);
     }
 
     public void handleNotificationsButton() {
-        toNotifications();
-    }
-
-    public void toNotifications(){
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/notifications.fxml"));
-
-        try {
-            AnchorPane root = loader.load();
-            dialogStage.setTitle("Notifications");
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            NotificationsController notificationsController = loader.getController();
-            notificationsController.setService(dialogStage, user);
-            dialogStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        menuButtonsController.moveToNotificationsButton();
     }
 
     public void handleSearchButton() {
-        toSearch();
-    }
-
-    public void toSearch(){
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/search.fxml"));
-
-        try {
-            AnchorPane root = loader.load();
-            dialogStage.setTitle("Search");
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            SearchController searchController = loader.getController();
-            searchController.setService(dialogStage, user);
-            dialogStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        menuButtonsController.moveToSearchButton();
     }
 
     public void handleHomeButton() {
-        toHome();
+        menuButtonsController.moveToHomeButton();
     }
-
-    public void toHome(){
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/home.fxml"));
-
-        try {
-            AnchorPane root = loader.load();
-            dialogStage.setTitle("Home");
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            HomeController homeController = loader.getController();
-            homeController.setService(dialogStage, user);
-            dialogStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

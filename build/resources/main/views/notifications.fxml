@@ -12,7 +12,7 @@
    <children>
       <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: 1F1A30;">
          <children>
-            <ListView layoutX="32.0" layoutY="81.0" prefHeight="355.0" prefWidth="334.0" stylesheets="@../cssStyle/listView.css" />
+            <ListView fx:id="listView" layoutX="32.0" layoutY="81.0" prefHeight="355.0" prefWidth="334.0" stylesheets="@../cssStyle/listView.css" />
             <TextField alignment="TOP_CENTER" layoutX="101.0" layoutY="41.0" promptText="Notifications" style="-fx-background-color: transparent;">
                <font>
                   <Font name="Dubai Bold" size="16.0" />

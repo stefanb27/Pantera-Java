@@ -1,35 +1,26 @@
 package com.example.pantera.controller;
 
 import com.example.pantera.domain.Connection;
-import com.example.pantera.domain.Friendship;
-import com.example.pantera.domain.Tuple;
 import com.example.pantera.domain.User;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
-import com.example.pantera.domain.validators.ValidateException;
 import com.example.pantera.events.FriendshipChangeEvent;
 import com.example.pantera.repository.db.FriendshipDBRepository;
 import com.example.pantera.repository.db.MessageDBRepository;
 import com.example.pantera.repository.db.UserDBRepository;
+import com.example.pantera.service.ControllerService;
 import com.example.pantera.service.FriendshipService;
 import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
 import com.example.pantera.utils.Observer;
+import com.example.pantera.utils.SearchCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +32,8 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     FriendshipService friendshipService = new FriendshipService(userDBRepository, friendshipDBRepository, new FriendshipValidator());
     MessageDBRepository messageDBRepository = new MessageDBRepository(connection);
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
+    ControllerService controllerService = new ControllerService(userDBRepository, friendshipDBRepository, messageDBRepository, connection);
+    MenuButtonsController menuButtonsController;
 
     private Stage dialogStage;
     private User user;
@@ -54,18 +47,8 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     private ImageView homeButton;
     @FXML
     private ImageView notificationsButton;
-    
-    @FXML
-    private TableView<User> tableView;
-    @FXML
-    private TableColumn<User, String> id;
-    @FXML
-    private TableColumn<User, String> firstNameColumn;
-    @FXML
-    private TableColumn<User, String> lastNameColumn;
     @FXML
     private TextField searchText;
-
     @FXML
     private ListView<User> listView;
 
@@ -77,16 +60,16 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     public void setService(Stage dialogStage, User user) {
         this.dialogStage = dialogStage;
         this.user = user;
+        this.menuButtonsController = new MenuButtonsController(dialogStage, user);
         friendshipService.addObserver(this);
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-
         uploadData();
     }
 
     private void uploadData() {
-
+        List<User> model = controllerService.searchListFilter(user);
+        usersModel.setAll(model);
+        listView.setCellFactory(param -> new SearchCell(user));
+        listView.setItems(usersModel);
     }
 
     @Override
@@ -96,130 +79,20 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
 
     public void handleOnKeyTyped() {
         String textTyped = searchText.getText();
-        List<User> users = (List<User>) userService.getAllUsers();
-        List<User> result = users.stream().filter(x -> !x.getId().equals(user.getId()) &&
-                (x.getFirstName().contains(textTyped) || x.getLastName().contains(textTyped))).collect(Collectors.toList());
-        usersModel.setAll(result);
+        List<User> users = controllerService.searchBoxFilter(user, textTyped);
+        usersModel.setAll(users);
         listView.setItems(usersModel);
     }
 
-    public Long handleMouseClicked() {
-        Long id = listView.getSelectionModel().getSelectedItem().getId();
-        Friendship friendship = friendshipService.findFriendship(new Tuple(user.getId(), id));
-        if (friendship != null && friendship.getStatus().equals("pending")
-                && friendship.getId().getLeft().equals(user.getId())) {
-            requestButton.setText("Remove request");
-        }
-        else {
-            requestButton.setText("Send request");
-        }
-        return id;
-    }
-
-    public void handleRequestButton() {
-        Long id = handleMouseClicked();
-        try {
-            if (requestButton.getText().equals("Send request")) {
-                friendshipService.addFriendship(user.getId(), id);
-            } else {
-                friendshipService.deleteFriendship(user.getId(), id);
-                requestButton.setText("Send request");
-            }
-        } catch(ValidateException e) {
-            //todo
-        }
-    }
-
-    public void handleBackButton() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/home.fxml"));
-
-        try {
-            BorderPane root = (BorderPane) loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("User Interface");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            HomeController userViewController = loader.getController();
-            userViewController.setService(dialogStage, user);
-            dialogStage.show();
-            //this.dialogStage.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public void handleNotificationsButton() {
-        toNotifications();
-    }
-
-    public void toNotifications(){
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/notifications.fxml"));
-
-        try {
-            AnchorPane root = loader.load();
-            dialogStage.setTitle("Notifications");
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            NotificationsController notificationsController = loader.getController();
-            notificationsController.setService(dialogStage, user);
-            dialogStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        menuButtonsController.moveToNotificationsButton();
     }
 
     public void handleProfileButton() {
-        toProfile();
-    }
-
-    public void toProfile(){
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/profile.fxml"));
-
-        try {
-            AnchorPane root = loader.load();
-            dialogStage.setTitle("Profile");
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            ProfileController profileController = loader.getController();
-            profileController.setService(dialogStage, user);
-            dialogStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        menuButtonsController.moveToProfileButton();
     }
 
     public void handleHomeButton() {
-        toHome();
-    }
-
-    public void toHome(){
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/home.fxml"));
-
-        try {
-            AnchorPane root = loader.load();
-            dialogStage.setTitle("Home");
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            HomeController homeController = loader.getController();
-            homeController.setService(dialogStage, user);
-            dialogStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        menuButtonsController.moveToHomeButton();
     }
 }

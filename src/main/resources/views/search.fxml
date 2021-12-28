@@ -12,7 +12,7 @@
         <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: 1F1A30;">
             <children>
                 <ListView fx:id="listView" layoutX="34.0" layoutY="89.0" prefHeight="347.0" prefWidth="329.0" stylesheets="@../cssStyle/listView.css" />
-                <TextField layoutX="124.0" layoutY="55.0" onKeyTyped="#handleOnKeyTyped" promptText="Search..." style="-fx-background-color: transparent; -fx-border-color: #0DF6E3; -fx-background-radius: 20; -fx-border-radius: 20; -fx-text-fill: #ffffff;" />
+                <TextField fx:id="searchText" layoutX="124.0" layoutY="55.0" onKeyTyped="#handleOnKeyTyped" promptText="Search..." style="-fx-background-color: transparent; -fx-border-color: #0DF6E3; -fx-background-radius: 20; -fx-border-radius: 20; -fx-text-fill: #ffffff;" />
             </children>
         </AnchorPane>
         <AnchorPane layoutY="452.0" prefHeight="132.0" prefWidth="398.0" style="-fx-background-color: #2F2E46; -fx-background-radius: 25;">
