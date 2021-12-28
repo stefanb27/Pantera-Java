@@ -22,7 +22,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,9 +47,14 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     private final ObservableList<User> usersModel = FXCollections.observableArrayList();
 
     @FXML
-    private Button backButton;
-    @FXML
     private Button requestButton;
+    @FXML
+    private ImageView profileButton;
+    @FXML
+    private ImageView homeButton;
+    @FXML
+    private ImageView notificationsButton;
+    
     @FXML
     private TableView<User> tableView;
     @FXML
@@ -58,6 +65,9 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     private TableColumn<User, String> lastNameColumn;
     @FXML
     private TextField searchText;
+
+    @FXML
+    private ListView<User> listView;
 
     @FXML
     private void initialize() {
@@ -90,11 +100,11 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
         List<User> result = users.stream().filter(x -> !x.getId().equals(user.getId()) &&
                 (x.getFirstName().contains(textTyped) || x.getLastName().contains(textTyped))).collect(Collectors.toList());
         usersModel.setAll(result);
-        tableView.setItems(usersModel);
+        listView.setItems(usersModel);
     }
 
     public Long handleMouseClicked() {
-        Long id = tableView.getSelectionModel().getSelectedItem().getId();
+        Long id = listView.getSelectionModel().getSelectedItem().getId();
         Friendship friendship = friendshipService.findFriendship(new Tuple(user.getId(), id));
         if (friendship != null && friendship.getStatus().equals("pending")
                 && friendship.getId().getLeft().equals(user.getId())) {
@@ -136,7 +146,77 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
             HomeController userViewController = loader.getController();
             userViewController.setService(dialogStage, user);
             dialogStage.show();
-            this.dialogStage.close();
+            //this.dialogStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void handleNotificationsButton() {
+        toNotifications();
+    }
+
+    public void toNotifications(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/notifications.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Notifications");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            NotificationsController notificationsController = loader.getController();
+            notificationsController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleProfileButton() {
+        toProfile();
+    }
+
+    public void toProfile(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/profile.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Profile");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            ProfileController profileController = loader.getController();
+            profileController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleHomeButton() {
+        toHome();
+    }
+
+    public void toHome(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/home.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Home");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            HomeController homeController = loader.getController();
+            homeController.setService(dialogStage, user);
+            dialogStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

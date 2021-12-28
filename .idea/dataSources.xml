@@ -8,5 +8,12 @@
       <jdbc-url>jdbc:postgresql://localhost:9292/lab5</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="SocialNetwork@localhost" uuid="99c36298-4dd2-4f04-a18f-b8bf8031a79a">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/SocialNetwork</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
