@@ -39,10 +39,10 @@ public class ProfileCell extends ListCell<User> {
         this.loggedUser = loggedUser;
         hbox.getChildren().addAll(label, pane, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
-        button.setOnAction(event -> handleAddButton(user));
+        button.setOnAction(event -> handleDeleteButton(user));
     }
 
-    public void handleAddButton(User user) {
+    public void handleDeleteButton(User user) {
         friendshipService.deleteFriendship(loggedUser.getId(), user.getId());
     }
 

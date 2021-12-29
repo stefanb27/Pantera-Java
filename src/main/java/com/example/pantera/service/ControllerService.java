@@ -102,8 +102,8 @@ public class ControllerService {
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setLong(1, user.getId());
-            ps.setString(2, searchText);
-            ps.setString(3, searchText);
+            ps.setString(2, '%' + searchText + '%');
+            ps.setString(3, '%' + searchText + '%');
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 Long id = resultSet.getLong(1);
