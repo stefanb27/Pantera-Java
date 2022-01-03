@@ -7,22 +7,27 @@ import com.example.pantera.events.FriendshipChangeEvent;
 import com.example.pantera.repository.db.FriendshipDBRepository;
 import com.example.pantera.repository.db.MessageDBRepository;
 import com.example.pantera.repository.db.UserDBRepository;
+import com.example.pantera.service.ControllerService;
 import com.example.pantera.service.FriendshipService;
 import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
 import com.example.pantera.utils.Observer;
+import com.example.pantera.utils.SearchCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,57 +42,81 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
     FriendshipService friendshipService = new FriendshipService(userDBRepository, friendshipDBRepository, new FriendshipValidator());
     MessageDBRepository messageDBRepository = new MessageDBRepository(connection);
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
+    ControllerService controllerService = new ControllerService(userDBRepository, friendshipDBRepository, messageDBRepository, connection);
+    MenuButtonsController menuButtonsController;
 
     private Stage dialogStage;
     private User user;
-    private final ObservableList<MessageWrapper> messageWrapperModel = FXCollections.observableArrayList();
+    private final ObservableList<User> usersModel = FXCollections.observableArrayList();
 
+    @FXML
+    private TextField nameOfUser;
     @FXML
     private Button backButton;
     @FXML
+    private ImageView searchButton;
+    @FXML
+    private ImageView homeButton;
+    @FXML
+    private ImageView profileButton;
+    @FXML
+    private ImageView notificationButton;
+    @FXML
     private Button deleteConversationButton;
     @FXML
-    private TableView<MessageWrapper> tableView;
+    private ListView<User> listView;
     @FXML
-    private TableColumn<MessageWrapper, String> id;
-    @FXML
-    private TableColumn<MessageWrapper, String> firstNameColumn;
-    @FXML
-    private TableColumn<MessageWrapper, String> lastNameColumn;
-    @FXML
-    private TableColumn<MessageWrapper, String> messageColumn;
+    private VBox chatBox;
 
     @FXML
     private void initialize() {
+
     }
 
     @FXML
     public void setService(Stage dialogStage, User user) {
         this.dialogStage = dialogStage;
         this.user = user;
-        //todo
-        //messageService.addObserver(this);
-
-        id.setCellValueFactory(new PropertyValueFactory<>("id"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
-
+        this.menuButtonsController = new MenuButtonsController(dialogStage, user);
         uploadData();
     }
 
     private void uploadData() {
-        List<User> all = (List<User>) friendshipService.getAllFriends(user.getId());
-        List<MessageWrapper> result = all.stream().map(x -> {
-            Message message = messageService.showConversations(user.getId(), x.getId()).stream().
-                    reduce((first, second) -> second).orElse(null);
-            return new MessageWrapper(x.getId(), x.getFirstName(), x.getLastName(),
-                    message.getMessage());
-        }).collect(Collectors.toList());
-        List<MessageWrapper> messageTaskList = StreamSupport.stream(result.spliterator(), false)
-                .collect(Collectors.toList());
-        messageWrapperModel.setAll(messageTaskList);
-        tableView.setItems(messageWrapperModel);
+        List<User> model = (List<User>) friendshipService.getAllFriends(user.getId());
+        usersModel.setAll(model);
+        listView.setItems(usersModel);
+    }
+
+    public void handleMouseClicked() {
+        User newUser = listView.getSelectionModel().getSelectedItem();
+        nameOfUser.setPromptText(newUser.getFirstName() + " " + newUser.getLastName());
+        List<Message> messages = controllerService.getConversation(user, newUser);
+        for (Message message : messages) {
+            if(message.getFrom().equals(newUser.getId())){
+                Label label = new Label(message.getMessage());
+                label.setStyle("-fx-text-fill: #ffffff");
+                //label.getStylesheets().add("cssStyle/textField.css");
+                label.setId("send");
+                HBox hBox = new HBox();
+                hBox.getChildren().add(label);
+                hBox.setAlignment(Pos.BASELINE_RIGHT);
+                chatBox.getChildren().add(hBox);
+                chatBox.setSpacing(10);
+            }
+            else
+            {
+                Label label = new Label(newUser.getFirstName() + " : " + message.getMessage());
+                label.setStyle("-fx-text-fill: #ffffff");
+                //label.getStylesheets().add("cssStyle/textField.css");
+                label.setId("send");
+                HBox hBox = new HBox();
+                hBox.getChildren().add(label);
+                hBox.setAlignment(Pos.BASELINE_LEFT);
+                chatBox.getChildren().add(hBox);
+                chatBox.setSpacing(10);
+            }
+
+        }
     }
 
     @Override
@@ -95,58 +124,16 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
         uploadData();
     }
 
-    public void handleMouseClicked() {
-        Long id = tableView.getSelectionModel().getSelectedItem().getId();
-        User newUser = userService.findUser(id);
-        //todo: needs 2 clicks
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/message.fxml"));
+    public void handleNotificationsButton() { menuButtonsController.moveToNotificationsButton(); }
 
-        try {
-            BorderPane root = (BorderPane) loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("User Interface");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            MessageController userViewController = loader.getController();
-            userViewController.setService(dialogStage, user, newUser);
-            dialogStage.show();
-            this.dialogStage.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public void handleSearchButton() {
+        menuButtonsController.moveToSearchButton();
     }
 
-    public void handleBackButton() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/views/profile.fxml"));
-
-        try {
-            BorderPane root = (BorderPane) loader.load();
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("User Interface");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            //dialogStage.initOwner(primaryStage);
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-
-            ProfileController userViewController = loader.getController();
-            userViewController.setService(dialogStage, user);
-            dialogStage.show();
-            this.dialogStage.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void handleHomeButton() {
+        menuButtonsController.moveToHomeButton();
     }
 
-    public void handleDeleteConversationButton() {
-        Long id = tableView.getSelectionModel().getSelectedItem().getId();
-        //todo
-    }
+    public void handleProfileButton() { menuButtonsController.moveToProfileButton(); }
+
 }

@@ -41,6 +41,10 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
 
     @FXML
     private Button requestButton;
+
+    @FXML
+    private ImageView inboxButton;
+
     @FXML
     private ImageView profileButton;
     @FXML
@@ -95,4 +99,6 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     public void handleHomeButton() {
         menuButtonsController.moveToHomeButton();
     }
+
+    public void handleInboxButton() { menuButtonsController.moveToInboxController();}
 }

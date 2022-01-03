@@ -7,6 +7,7 @@ import com.example.pantera.utils.NotificationsCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -48,6 +49,9 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     private ListView<NotificationsWrapper> listView;
 
     @FXML
+    private ImageView inboxButton;
+
+    @FXML
     private void initialize() {
     }
 
@@ -82,4 +86,6 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     public void handleHomeButton() {
         menuButtonsController.moveToHomeButton();
     }
+
+    public void handleInboxButton() { menuButtonsController.moveToInboxController();}
 }

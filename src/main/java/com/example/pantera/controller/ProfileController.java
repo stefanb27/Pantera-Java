@@ -61,6 +61,9 @@ public class ProfileController {
     private Button myPostsButton;
     @FXML
     private Button tagsButton;
+
+    @FXML
+    private ImageView inboxButton;
     @FXML
     private Label firstName;
     @FXML
@@ -98,4 +101,7 @@ public class ProfileController {
     public void handleHomeButton() {
         menuButtonsController.moveToHomeButton();
     }
+
+    public void handleInboxButton() { menuButtonsController.moveToInboxController();}
+
 }

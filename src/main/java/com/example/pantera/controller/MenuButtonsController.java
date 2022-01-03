@@ -92,4 +92,23 @@ public class MenuButtonsController {
             e.printStackTrace();
         }
     }
+
+    public void moveToInboxController() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/inbox.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Inbox");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            InboxController notificationsController = loader.getController();
+            notificationsController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

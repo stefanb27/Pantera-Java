@@ -35,7 +35,7 @@ public class HomeController {
     @FXML
     private ScrollPane feed;
     @FXML
-    private Button messageButton;
+    private ImageView inboxButton;
     @FXML
     private ImageView homeButton;
     @FXML
@@ -68,4 +68,6 @@ public class HomeController {
     public void handleProfileButton() {
         menuButtonsController.moveToProfileButton();
     }
+
+    public void handleInboxButton() { menuButtonsController.moveToInboxController();}
 }

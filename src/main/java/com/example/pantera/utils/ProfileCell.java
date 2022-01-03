@@ -40,6 +40,7 @@ public class ProfileCell extends ListCell<User> {
         hbox.getChildren().addAll(label, pane, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
         button.setOnAction(event -> handleAddButton(user));
+        //button.setStyle("\"@../cssStyle/buttonLOGIN.css\"");
     }
 
     public void handleAddButton(User user) {

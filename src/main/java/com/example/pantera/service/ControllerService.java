@@ -102,8 +102,8 @@ public class ControllerService {
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setLong(1, user.getId());
-            ps.setString(2, searchText);
-            ps.setString(3, searchText);
+            ps.setString(2, '%' + searchText + '%');
+            ps.setString(3, '%' + searchText + '%');
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 Long id = resultSet.getLong(1);
@@ -121,4 +121,66 @@ public class ControllerService {
         }
         return users;
     }
+
+    public List<Message> getConversation(User user1, User user2) {
+        List<Message> messages = new ArrayList<>();
+        String sql = "select messages.touser, conversations.fromuser, conversations.message, conversations.date from messages " +
+                "inner join conversations on messages.idm = conversations.id " +
+                "where messages.touser = ? and conversations.fromuser = ? or " +
+                "messages.touser = ? and conversations.fromuser = ?";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, user1.getId());
+            ps.setLong(2, user2.getId());
+            ps.setLong(3, user2.getId());
+            ps.setLong(4, user1.getId());
+            ResultSet resultSet = ps.executeQuery();
+            int nr = 0;
+            while (resultSet.next()) {
+                if (nr == 0) {
+                    // TODO: 03.01.2022
+                }
+                Long touser = resultSet.getLong(1);
+                Long fromuser = resultSet.getLong(2);
+                String message = resultSet.getString(3);
+                LocalDateTime date = resultSet.getTimestamp(4).toLocalDateTime();
+                Message message1 = new Message(fromuser, message, date);
+                List<Long> to = new ArrayList<>();
+                to.add(touser);
+                message1.setTo(to);
+                messages.add(message1);
+            }
+            ps.execute();
+            return messages;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
+//    public List<User> myFriendsFilter(User user, String searchText) {
+//        List<User> users = new ArrayList<>();
+//        String sql = "select * from users where id != ? and first_name like ? or last_name like ?";
+//        try (java.sql.Connection  con = connection.getConnection();
+//             PreparedStatement ps = con.prepareStatement(sql)) {
+//            ps.setLong(1, user.getId());
+//            ps.setString(2, '%' + searchText + '%');
+//            ps.setString(3, '%' + searchText + '%');
+//            ResultSet resultSet = ps.executeQuery();
+//            while (resultSet.next()) {
+//                Long id = resultSet.getLong(1);
+//                String firstName = resultSet.getString(2);
+//                String lastName = resultSet.getString(3);
+//                String email = resultSet.getString(4);
+//                String password = resultSet.getString(5);
+//                User anUser = new User(firstName, lastName, email, password);
+//                anUser.setId(id);
+//                users.add(anUser);
+//            }
+//            ps.execute();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return users;
+//    }
 }
