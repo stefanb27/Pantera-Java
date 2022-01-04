@@ -21,7 +21,7 @@ public class ProfileCell extends ListCell<User> {
     HBox hbox = new HBox();
     Label label = new Label("");
     Pane pane = new Pane();
-    Button button = new Button("del");
+    Button button = new Button("Remove");
     User loggedUser;
     User user;
 
@@ -37,6 +37,7 @@ public class ProfileCell extends ListCell<User> {
     public ProfileCell(User loggedUser) {
         super();
         this.loggedUser = loggedUser;
+        this.button.getStylesheets().add("cssStyle/buttonLOGIN.css");
         hbox.getChildren().addAll(label, pane, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
         button.setOnAction(event -> handleAddButton(user));

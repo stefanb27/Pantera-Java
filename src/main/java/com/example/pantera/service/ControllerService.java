@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ControllerService {
     private Repository<Long, User> userRepository;
@@ -48,8 +50,8 @@ public class ControllerService {
 
     public List<NotificationsWrapper> notificationsFilter(User user) {
         List<NotificationsWrapper> users = new ArrayList<>();
-        String sql = "select friendships.id1, users.first_name, users.last_name, friendships.date " +
-                "from users inner join friendships on friendships.id2 = ?" +
+        String sql = "select friendships.id1, users.first_name, users.last_name, friendships.status, friendships.date " +
+                "from users inner join friendships on friendships.id2 = ? " +
                 "where users.id = friendships.id1 and friendships.status = ?";
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -59,9 +61,10 @@ public class ControllerService {
             while (resultSet.next()) {
                 Long id = resultSet.getLong(1);
                 String firstName = resultSet.getString(2);
-                String lastName = resultSet.getString(3);
-                LocalDateTime date = resultSet.getTimestamp(4).toLocalDateTime();
-                NotificationsWrapper anUser = new NotificationsWrapper(id, firstName, lastName, date);
+                String lastName = resultSet.getString(4);
+                String status = resultSet.getString(3);
+                LocalDateTime date = resultSet.getTimestamp(5).toLocalDateTime();
+                NotificationsWrapper anUser = new NotificationsWrapper(id, firstName, status, lastName, date);
                 anUser.setId(id);
                 users.add(anUser);
             }
@@ -69,7 +72,52 @@ public class ControllerService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return users;
+
+        String sql1 = "select friendships.id1, users.first_name, users.last_name, friendships.status, friendships.date " +
+                "from users inner join friendships on friendships.id2 = ? " +
+                "where users.id = friendships.id1 and friendships.status = ?";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql1)) {
+            ps.setLong(1, user.getId());
+            ps.setString(2, "approved");
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Long id1 = resultSet.getLong(1);
+                String firstName = resultSet.getString(2);
+                String lastName = resultSet.getString(4);
+                String status = resultSet.getString(3);
+                LocalDateTime date = resultSet.getTimestamp(5).toLocalDateTime();
+                NotificationsWrapper anUser = new NotificationsWrapper(id1, firstName, status, lastName, date);
+                anUser.setId(id1);
+                users.add(anUser);
+            }
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String sql2 = "select friendships.id2, users.first_name, users.last_name, friendships.status, friendships.date " +
+                "from users inner join friendships on friendships.id1 = ? " +
+                "where users.id = friendships.id2 and friendships.status = ?";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql2)) {
+            ps.setLong(1, user.getId());
+            ps.setString(2, "approved");
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Long id1 = resultSet.getLong(1);
+                String firstName = resultSet.getString(2);
+                String lastName = resultSet.getString(4);
+                String status = resultSet.getString(3);
+                LocalDateTime date = resultSet.getTimestamp(5).toLocalDateTime();
+                NotificationsWrapper anUser = new NotificationsWrapper(id1, firstName, status, lastName, date);
+                anUser.setId(id1);
+                users.add(anUser);
+            }
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users.stream().sorted(Comparator.comparing(NotificationsWrapper::getDate).reversed()).collect(Collectors.toList());
     }
 
     public List<User> searchListFilter(User user) {
@@ -122,7 +170,7 @@ public class ControllerService {
         return users;
     }
 
-    public List<Message> getConversation(User user1, User user2) {
+    public List<Message> getConversation(Long user1, Long user2) {
         List<Message> messages = new ArrayList<>();
         String sql = "select messages.touser, conversations.fromuser, conversations.message, conversations.date from messages " +
                 "inner join conversations on messages.idm = conversations.id " +
@@ -130,10 +178,10 @@ public class ControllerService {
                 "messages.touser = ? and conversations.fromuser = ?";
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setLong(1, user1.getId());
-            ps.setLong(2, user2.getId());
-            ps.setLong(3, user2.getId());
-            ps.setLong(4, user1.getId());
+            ps.setLong(1, user1);
+            ps.setLong(2, user2);
+            ps.setLong(3, user2);
+            ps.setLong(4, user1);
             ResultSet resultSet = ps.executeQuery();
             int nr = 0;
             while (resultSet.next()) {
@@ -155,7 +203,49 @@ public class ControllerService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return messages;
+        return null;
+    }
+
+    public boolean findPendingFriendship(User user1, User user2) {
+        String sql = "select * from friendships " +
+                "where status = ? and id1 = ? and id2 = ?";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "pending");
+            ps.setLong(2, user1.getId());
+            ps.setLong(3, user2.getId());
+            ResultSet resultSet = ps.executeQuery();
+            int nr = 0;
+            if (resultSet.next()) {
+                return true;
+            }
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean findApprovedFriendship(User user1, User user2) {
+        String sql = "select * from friendships " +
+                "where status = ? and id1 = ? and id2 = ? or id1 = ? and id2 = ?";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "approved");
+            ps.setLong(2, user1.getId());
+            ps.setLong(3, user2.getId());
+            ps.setLong(4, user2.getId());
+            ps.setLong(5, user1.getId());
+            ResultSet resultSet = ps.executeQuery();
+            int nr = 0;
+            if (resultSet.next()) {
+                return true;
+            }
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 //    public List<User> myFriendsFilter(User user, String searchText) {

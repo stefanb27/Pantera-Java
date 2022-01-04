@@ -10,7 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.NotificationsController">
    <children>
-      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: 1F1A30;">
+      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;">
          <children>
             <ListView fx:id="listView" layoutX="32.0" layoutY="81.0" prefHeight="355.0" prefWidth="334.0" stylesheets="@../cssStyle/listView.css" />
             <TextField alignment="TOP_CENTER" layoutX="101.0" layoutY="41.0" promptText="Notifications" style="-fx-background-color: transparent;">

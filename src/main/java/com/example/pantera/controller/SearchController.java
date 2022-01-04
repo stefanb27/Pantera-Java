@@ -82,10 +82,16 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     }
 
     public void handleOnKeyTyped() {
-        String textTyped = searchText.getText();
-        List<User> users = controllerService.searchBoxFilter(user, textTyped);
-        usersModel.setAll(users);
-        listView.setItems(usersModel);
+        if (searchText.getText().equals("")) {
+            List<User> model = controllerService.searchListFilter(user);
+            usersModel.setAll(model);
+            listView.setItems(usersModel);
+        } else {
+            String textTyped = searchText.getText();
+            List<User> users = controllerService.searchBoxFilter(user, textTyped);
+            usersModel.setAll(users);
+            listView.setItems(usersModel);
+        }
     }
 
     public void handleNotificationsButton() {

@@ -12,7 +12,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.ProfileController">
    <children>
-      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: 1F1A30;">
+      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;">
          <children>
             <ImageView fitHeight="53.0" fitWidth="66.0" layoutX="172.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
                <image>

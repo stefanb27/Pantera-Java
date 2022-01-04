@@ -15,7 +15,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.InboxController">
    <children>
-      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: 1F1A30;">
+      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;">
          <children>
             <ListView fx:id="listView" layoutX="14.0" layoutY="64.0" onMouseClicked="#handleMouseClicked" prefHeight="373.0" prefWidth="115.0" style="-fx-border-radius: 10;" stylesheets="@../cssStyle/listView.css" />
             <Label fx:id="firstName" alignment="CENTER_RIGHT" layoutX="115.0" layoutY="84.0" prefHeight="17.0" prefWidth="53.0" textFill="WHITE">
@@ -33,7 +33,7 @@
                   <Font name="Dubai Bold" size="16.0" />
                </font>
             </Text>
-            <ScrollPane hbarPolicy="NEVER" layoutX="136.0" layoutY="84.0" prefHeight="321.0" prefWidth="252.0" stylesheets="@../cssStyle/scrollPane.css" vbarPolicy="NEVER">
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutX="136.0" layoutY="84.0" prefHeight="321.0" prefWidth="252.0" stylesheets="@../cssStyle/scrollPane.css" vbarPolicy="NEVER">
                <content>
                   <VBox fx:id="chatBox" prefHeight="317.0" prefWidth="242.0" style="-fx-border-color: #0DF6E3; -fx-border-radius: 10;" />
                </content>
@@ -43,12 +43,12 @@
                   <Font name="Dubai Bold" size="16.0" />
                </font>
             </Text>
-            <Button layoutX="317.0" layoutY="411.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="63.0" style="-fx-border-radius: 10;" stylesheets="@../cssStyle/buttonLOGIN.css" text="Send">
+            <Button fx:id="sendButton" layoutX="317.0" layoutY="411.0" mnemonicParsing="false" onAction="#handleSendButton" prefHeight="30.0" prefWidth="63.0" style="-fx-background-radius: 10;" stylesheets="@../cssStyle/buttonLOGIN.css" text="Send">
                <font>
                   <Font name="Dubai Bold" size="12.0" />
                </font>
             </Button>
-            <TextField layoutX="137.0" layoutY="411.0" prefHeight="28.0" prefWidth="175.0" style="-fx-border-radius: 8;" stylesheets="@../cssStyle/textField.css" />
+            <TextField fx:id="sendTextField" layoutX="137.0" layoutY="411.0" prefHeight="28.0" prefWidth="175.0" style="-fx-border-radius: 8;" stylesheets="@../cssStyle/textField.css" />
             <Line endX="71.00001525878906" endY="-3.814697265625E-6" layoutX="157.0" layoutY="42.0" startX="-50.333351135253906" startY="-3.814697265625E-6" stroke="#9ea8fd" />
             <Line endX="99.66665649414062" endY="-3.814697265625E-6" layoutX="277.0" layoutY="42.0" startX="8.333328247070312" startY="-3.814697265625E-6" stroke="#9ea8fd" />
             <Line endX="-26.333324432373047" endY="-3.814697265625E-6" layoutX="65.0" layoutY="42.0" startX="-50.333351135253906" startY="-3.814697265625E-6" stroke="#9ea8fd" />
@@ -62,7 +62,10 @@
                   <Image url="@../images/video.png" />
                </image>
             </ImageView>
-            <TextField fx:id="nameOfUser" layoutX="142.0" layoutY="57.0" style="-fx-background-color: transparent; -fx-text-fill: #ffffff;" />
+            <TextField fx:id="nameOfUser" editable="false" layoutX="140.0" layoutY="45.0" style="-fx-background-color: transparent; -fx-text-fill: #ffffff;">
+               <font>
+                  <Font name="Dubai Regular" size="20.0" />
+               </font></TextField>
          </children>
       </AnchorPane>
       <AnchorPane layoutY="452.0" prefHeight="132.0" prefWidth="398.0" style="-fx-background-color: #2F2E46; -fx-background-radius: 25;">
