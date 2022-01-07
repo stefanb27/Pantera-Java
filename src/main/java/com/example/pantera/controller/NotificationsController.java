@@ -56,7 +56,7 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     }
 
     @FXML
-    public void setService(Stage dialogStage, User user) {
+    public void setService(Stage dialogStage, Page user) {
         this.dialogStage = dialogStage;
         this.user = user;
         this.menuButtonsController = new MenuButtonsController(dialogStage, user);

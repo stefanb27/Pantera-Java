@@ -70,12 +70,14 @@ public class NotificationsCell extends ListCell<NotificationsWrapper> {
         friendshipService.approveFriendship(loggedUser.getId(), user.getId());
         addButton.setText("Friend");
         addButton.setDisable(true);
+        deleteButton.setDisable(true);
     }
 
     public void handleDeleteButton(NotificationsWrapper user) {
         friendshipService.deleteFriendship(loggedUser.getId(), user.getId());
         deleteButton.setText("Enemy");
         addButton.setDisable(true);
+        deleteButton.setDisable(true);
     }
 
     @Override

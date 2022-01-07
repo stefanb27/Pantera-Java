@@ -1,6 +1,7 @@
 package com.example.pantera.controller;
 
 import com.example.pantera.domain.Connection;
+import com.example.pantera.domain.Page;
 import com.example.pantera.domain.User;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
@@ -57,11 +58,10 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     private ListView<User> listView;
 
     @FXML
-    private void initialize() {
-    }
+    private void initialize() {}
 
     @FXML
-    public void setService(Stage dialogStage, User user) {
+    public void setService(Stage dialogStage, Page user) {
         this.dialogStage = dialogStage;
         this.user = user;
         this.menuButtonsController = new MenuButtonsController(dialogStage, user);

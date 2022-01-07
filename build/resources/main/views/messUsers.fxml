@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.InboxController">
+   <children>
+      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;">
+         <children>
+            <ListView fx:id="listView" layoutX="14.0" layoutY="64.0" onMouseClicked="#handleMouseClicked" prefHeight="373.0" prefWidth="369.0" style="-fx-border-radius: 10;" stylesheets="@../cssStyle/listView.css" />
+            <Text fill="WHITE" layoutX="26.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chats">
+               <font>
+                  <Font name="Dubai Bold" size="18.0" />
+               </font>
+            </Text>
+            <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="26.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/b4.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="53.0" fitWidth="63.0" layoutX="26.0" layoutY="153.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/b3.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="26.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/f1.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="26.0" layoutY="297.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/b1.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="53.0" fitWidth="53.0" layoutX="26.0" layoutY="365.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/b2.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="104.0" layoutY="83.0" text="adi pop" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="104.0" layoutY="153.0" text="mita bita" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="105.0" layoutY="220.0" text="ana pana" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="105.0" layoutY="297.0" text="teo morosanu" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="104.0" layoutY="365.0" prefHeight="30.0" prefWidth="147.0" text="hatz cu dimineata" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="105.0" layoutY="250.0" prefHeight="25.0" prefWidth="187.0" text="ana: haida                22:31" textFill="#8284ad">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="105.0" layoutY="110.0" prefHeight="25.0" prefWidth="187.0" text="You: dar de ce ?      22:31" textFill="#8284ad">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="105.0" layoutY="180.0" prefHeight="25.0" prefWidth="187.0" text="You: nu vreau...         22:31" textFill="#8284ad">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="105.0" layoutY="324.0" prefHeight="25.0" prefWidth="187.0" text="You: iesi afar             22:31" textFill="#8284ad">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="105.0" layoutY="395.0" prefHeight="25.0" prefWidth="187.0" text="teo: ce faci ?               00:00" textFill="#8284ad">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="452.0" prefHeight="132.0" prefWidth="398.0" style="-fx-background-color: #2F2E46; -fx-background-radius: 25;">
+         <children>
+            <Line endX="-62.99998474121094" endY="-14.0" layoutX="199.0" layoutY="83.0" startX="-94.3333511352539" startY="-14.0" stroke="#9ea8fd" style="visibility: 0.4;" />
+            <AnchorPane layoutX="-4.0" layoutY="37.0" prefHeight="79.0" prefWidth="398.0" />
+            <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="107.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/mess.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="profileButton" fitHeight="42.0" fitWidth="61.0" layoutX="311.0" layoutY="14.0" onMouseClicked="#handleProfileButton" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/profile2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="notificationsButton" fitHeight="35.0" fitWidth="35.0" layoutX="37.0" layoutY="17.0" onMouseClicked="#handleNotificationsButton" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/mega2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="homeButton" fitHeight="53.0" fitWidth="61.0" layoutX="173.0" layoutY="10.0" onMouseClicked="#handleHomeButton" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/hand2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="searchButton" fitHeight="35.0" fitWidth="35.0" layoutX="250.0" layoutY="20.0" onMouseClicked="#handleSearchButton" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/search2.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

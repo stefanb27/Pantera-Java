@@ -53,12 +53,12 @@ public class SearchCell extends ListCell<User> {
 //                "    -fx-background-radius: 50;\n" +
 //                "    -fx-text-fill: #1f1a30;");
         this.button.getStylesheets().add("cssStyle/buttonLOGIN.css");
-        this.button.setPrefWidth(60);
+        this.button.setPrefWidth(70);
         hbox.getChildren().addAll(label, pane, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
         button.setOnAction(event -> handleAddButton(user));
     }
-
+//enum
     public void handleAddButton(User user) {
         if (this.button.getText().equals("Add")) {
             friendshipService.addFriendship(loggedUser.getId(), user.getId());

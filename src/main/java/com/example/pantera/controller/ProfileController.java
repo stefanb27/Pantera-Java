@@ -1,5 +1,6 @@
 package com.example.pantera.controller;
 
+import com.example.pantera.domain.Page;
 import com.example.pantera.events.FriendshipChangeEvent;
 import com.example.pantera.utils.Observer;
 import com.example.pantera.utils.ProfileCell;
@@ -79,7 +80,7 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
     }
 
     @FXML
-    public void setService(Stage dialogStage, User user) {
+    public void setService(Stage dialogStage, Page user) {
         this.dialogStage = dialogStage;
         this.user = user;
         this.menuButtonsController = new MenuButtonsController(dialogStage, user);
@@ -89,7 +90,8 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
         uploadData();
     }
 
-    private void uploadData() {
+    public void uploadData() {
+        System.out.println("da");
         Iterable<User> all = friendshipService.getAllFriends(user.getId());
         List<User> messageTaskList = StreamSupport.stream(all.spliterator(), false)
                 .collect(Collectors.toList());

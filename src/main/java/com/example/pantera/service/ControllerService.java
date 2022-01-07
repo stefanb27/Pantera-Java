@@ -6,7 +6,6 @@ import com.example.pantera.repository.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,7 +25,7 @@ public class ControllerService {
         this.connection = connection;
     }
 
-    public User checkLogIn(String email, String password) {
+    public Page checkLogIn(String email, String password) {
         String sql = "select * from users where email = ? and password = ?";
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -37,7 +36,7 @@ public class ControllerService {
                 Long id = resultSet.getLong(1);
                 String firstName = resultSet.getString(2);
                 String lastName = resultSet.getString(3);
-                User user = new User(firstName, lastName, email, password);
+                Page user = new Page(firstName, lastName, email, password);
                 user.setId(id);
                 return user;
             }
@@ -247,6 +246,38 @@ public class ControllerService {
         }
         return false;
     }
+
+    public List<User> findFriends(User user) {
+        List<User> friends = new ArrayList<>();
+        String sql = "select * from friendships " +
+                "where status = ? and id1 = ? or id2 = ?";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "approved");
+            ps.setLong(2, user.getId());
+            ps.setLong(3, user.getId());
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Long id1 = resultSet.getLong("id1");
+                Long id2 = resultSet.getLong("id2");
+                //LocalDateTime dateTime = resultSet.getTimestamp("date").toLocalDateTime();
+                //String status = resultSet.getString("status");
+
+                if(!id1.equals(user.getId())) {
+                    friends.add(userRepository.findOne(id1));
+                }
+                else{
+                    friends.add(userRepository.findOne(id2));
+                }
+            }
+            return friends;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return friends;
+    }
+
+
 
 //    public List<User> myFriendsFilter(User user, String searchText) {
 //        List<User> users = new ArrayList<>();
