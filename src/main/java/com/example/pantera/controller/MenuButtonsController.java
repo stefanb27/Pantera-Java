@@ -1,5 +1,6 @@
 package com.example.pantera.controller;
 
+import com.example.pantera.domain.Page;
 import com.example.pantera.domain.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,9 +11,9 @@ import java.io.IOException;
 
 public class MenuButtonsController {
     private Stage dialogStage;
-    private User user;
+    private Page user;
 
-    public MenuButtonsController(Stage dialogStage, User user) {
+    public MenuButtonsController(Stage dialogStage, Page user) {
         this.dialogStage = dialogStage;
         this.user = user;
     }
@@ -85,6 +86,25 @@ public class MenuButtonsController {
             dialogStage.setScene(scene);
 
             NotificationsController notificationsController = loader.getController();
+            notificationsController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void moveToInboxController() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/inbox.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Inbox");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            InboxController notificationsController = loader.getController();
             notificationsController.setService(dialogStage, user);
             dialogStage.show();
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Message extends Entity<Tuple<Long, Long>> {
-    Message reply = null;
+    private Message reply = null;
     private Long from;
     private List<Long> to = new ArrayList<>();
     private String message;

@@ -1,5 +1,5 @@
 .list-view{
-    -fx-background-color: transparent;
+    -fx-background-color: #1F1A30;
     -fx-background-radius: 20;
     -fx-font-family: Dubai;
     -fx-font-size: 14;
@@ -8,8 +8,23 @@
 }
 
 .list-view .list-cell{
-    -fx-background-color: transparent;
+    -fx-background-color: #1F1A30;
     -fx-text-background-color: white;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
+
+.list-view .list-cell:filled:hover {
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-background-color: #2F2E46;
     -fx-text-fill: white;
 }
 
+.list-view .list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #2F2E46;
+    -fx-text-fill: white;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+}

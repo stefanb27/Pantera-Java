@@ -1,5 +1,6 @@
 package com.example.pantera.controller;
 
+import com.example.pantera.domain.Page;
 import com.example.pantera.service.ControllerService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,14 +52,14 @@ public class LogInController {
 
     @FXML
     private void initialize() {
-        usernameText.setText("god@gmail.com");
-        passwordText.setText("123");
+        usernameText.setText("john@gmail.com");
+        passwordText.setText("1");
     }
 
     public void onLoginButtonClick() {
         String email = usernameText.getText();
         String password = passwordText.getText();
-        User user = controllerService.checkLogIn(email, password);
+        Page user = controllerService.checkLogIn(email, password);
         System.out.println(user);
         if (user == null) {
             usernameText.setText("");
@@ -69,7 +70,12 @@ public class LogInController {
         }
     }
 
-    public void runUser(User user){
+    public void loadPage(Page user){
+        user.setFriends(controllerService.findFriends(user));
+       // for(User )
+    }
+
+    public void runUser(Page user){
         MenuButtonsController menuButtonsController = new MenuButtonsController(logInStage, user);
         menuButtonsController.moveToHomeButton();
     }

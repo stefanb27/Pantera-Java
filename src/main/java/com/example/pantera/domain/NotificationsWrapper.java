@@ -6,12 +6,14 @@ public class NotificationsWrapper {
     private Long id;
     private String firstName;
     private String lastName;
+    private String status;
     private LocalDateTime date;
 
-    public NotificationsWrapper(Long id, String firstName, String lastName, LocalDateTime date) {
+    public NotificationsWrapper(Long id, String firstName, String lastName, String status, LocalDateTime date) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.status = status;
         this.date = date;
     }
 
@@ -39,11 +41,30 @@ public class NotificationsWrapper {
         this.lastName = lastName;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public LocalDateTime getDate() {
         return date;
     }
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "NotificationsWrapper{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", status='" + status + '\'' +
+                ", date=" + date +
+                '}';
     }
 }

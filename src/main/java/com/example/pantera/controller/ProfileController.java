@@ -1,6 +1,10 @@
 package com.example.pantera.controller;
 
+import com.example.pantera.domain.Page;
+import com.example.pantera.events.FriendshipChangeEvent;
+import com.example.pantera.utils.Observer;
 import com.example.pantera.utils.ProfileCell;
+import com.example.pantera.utils.SearchCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -30,7 +34,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class ProfileController {
+public class ProfileController implements Observer<FriendshipChangeEvent> {
     Connection connection = new Connection();
     UserDBRepository userDBRepository = new UserDBRepository(connection);
     FriendshipDBRepository friendshipDBRepository = new FriendshipDBRepository(connection);
@@ -40,7 +44,7 @@ public class ProfileController {
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
     MenuButtonsController menuButtonsController;
 
-    ObservableList<User> myFriendsModel = FXCollections.observableArrayList();
+    private final ObservableList<User> myFriendsModel = FXCollections.observableArrayList();
 
     private Stage dialogStage;
     private User user;
@@ -61,6 +65,9 @@ public class ProfileController {
     private Button myPostsButton;
     @FXML
     private Button tagsButton;
+
+    @FXML
+    private ImageView inboxButton;
     @FXML
     private Label firstName;
     @FXML
@@ -73,18 +80,29 @@ public class ProfileController {
     }
 
     @FXML
-    public void setService(Stage dialogStage, User user) {
+    public void setService(Stage dialogStage, Page user) {
         this.dialogStage = dialogStage;
         this.user = user;
         this.menuButtonsController = new MenuButtonsController(dialogStage, user);
         firstName.setText(user.getFirstName());
         lastName.setText(user.getLastName());
+        friendshipService.addObserver(this);
+        uploadData();
+    }
+
+    public void uploadData() {
+        System.out.println("da");
         Iterable<User> all = friendshipService.getAllFriends(user.getId());
         List<User> messageTaskList = StreamSupport.stream(all.spliterator(), false)
                 .collect(Collectors.toList());
         listView.setCellFactory(param -> new ProfileCell(user));
         myFriendsModel.setAll(messageTaskList);
         listView.setItems(myFriendsModel);
+    }
+
+    @Override
+    public void update(FriendshipChangeEvent friendshipChangeEvent) {
+        uploadData();
     }
 
     public void handleNotificationsButton() {
@@ -98,4 +116,7 @@ public class ProfileController {
     public void handleHomeButton() {
         menuButtonsController.moveToHomeButton();
     }
+
+    public void handleInboxButton() { menuButtonsController.moveToInboxController();}
+
 }

@@ -12,7 +12,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.ProfileController">
    <children>
-      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: 1F1A30;">
+      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;">
          <children>
             <ImageView fitHeight="53.0" fitWidth="66.0" layoutX="172.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -42,7 +42,7 @@
          <children>
             <Line endX="149.00003051757812" endY="-14.0" layoutX="199.0" layoutY="83.0" startX="119.66665649414062" startY="-14.0" stroke="#9ea8fd" style="visibility: 0.4;" />
             <AnchorPane layoutX="-4.0" layoutY="37.0" prefHeight="79.0" prefWidth="398.0" />
-            <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="107.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="inboxButton" fitHeight="42.0" fitWidth="42.0" layoutX="107.0" layoutY="13.0" onMouseClicked="#handleInboxButton" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/mess2.png" />
                </image>

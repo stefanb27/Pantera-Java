@@ -13,6 +13,7 @@ import com.example.pantera.service.UserService;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -21,7 +22,7 @@ public class ProfileCell extends ListCell<User> {
     HBox hbox = new HBox();
     Label label = new Label("");
     Pane pane = new Pane();
-    Button button = new Button("del");
+    Button button = new Button();
     User loggedUser;
     User user;
 
@@ -37,9 +38,15 @@ public class ProfileCell extends ListCell<User> {
     public ProfileCell(User loggedUser) {
         super();
         this.loggedUser = loggedUser;
+        this.button.getStylesheets().add("cssStyle/buttonLOGIN.css");
+        ImageView imageView2 = new ImageView("X:\\pantera\\src\\main\\resources\\images\\x.png");
+        imageView2.setFitWidth(13);
+        imageView2.setFitHeight(13);
+        this.button.setGraphic(imageView2);
         hbox.getChildren().addAll(label, pane, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
         button.setOnAction(event -> handleAddButton(user));
+        //button.setStyle("\"@../cssStyle/buttonLOGIN.css\"");
     }
 
     public void handleAddButton(User user) {
