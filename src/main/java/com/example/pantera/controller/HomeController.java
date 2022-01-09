@@ -1,10 +1,12 @@
 package com.example.pantera.controller;
 
+import com.example.pantera.domain.Page;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -30,12 +32,12 @@ public class HomeController {
     MenuButtonsController menuButtonsController;
 
     private Stage dialogStage;
-    private User user;
+    private Page user;
 
     @FXML
     private ScrollPane feed;
     @FXML
-    private Button messageButton;
+    private ImageView inboxButton;
     @FXML
     private ImageView homeButton;
     @FXML
@@ -46,12 +48,10 @@ public class HomeController {
     private ImageView notificationsButton;
 
     @FXML
-    private void initialize() {
-
-    }
+    private void initialize() {}
 
     @FXML
-    public void setService(Stage dialogStage, User user) {
+    public void setService(Stage dialogStage, Page user) {
         this.dialogStage = dialogStage;
         this.user = user;
         this.menuButtonsController = new MenuButtonsController(dialogStage, user);
@@ -68,4 +68,6 @@ public class HomeController {
     public void handleProfileButton() {
         menuButtonsController.moveToProfileButton();
     }
+
+    public void handleInboxButton() { menuButtonsController.moveToInboxController();}
 }

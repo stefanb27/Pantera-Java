@@ -10,7 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.NotificationsController">
    <children>
-      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: 1F1A30;">
+      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;">
          <children>
             <ListView fx:id="listView" layoutX="32.0" layoutY="81.0" prefHeight="355.0" prefWidth="334.0" stylesheets="@../cssStyle/listView.css" />
             <TextField alignment="TOP_CENTER" layoutX="101.0" layoutY="41.0" promptText="Notifications" style="-fx-background-color: transparent;">
@@ -24,7 +24,7 @@
          <children>
             <Line endX="-130.33331298828125" endY="-14.0" layoutX="199.0" layoutY="83.0" startX="-157.6666717529297" startY="-14.0" stroke="#9ea8fd" style="visibility: 0.4;" />
             <AnchorPane layoutX="-4.0" layoutY="37.0" prefHeight="79.0" prefWidth="398.0" />
-            <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="107.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="inboxButton" fitHeight="42.0" fitWidth="42.0" layoutX="107.0" layoutY="13.0" onMouseClicked="#handleInboxButton" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/mess2.png" />
                </image>

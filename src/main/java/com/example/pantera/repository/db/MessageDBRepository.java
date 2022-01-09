@@ -148,7 +148,7 @@ public class MessageDBRepository implements Repository<Tuple<Long, Long>, Messag
                     ps3.executeUpdate();
                 }
             }
-
+            return new Message(1L, "da", LocalDateTime.now());
         } catch (SQLException e) {
             e.printStackTrace();
         }

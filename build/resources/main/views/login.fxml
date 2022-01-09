@@ -62,9 +62,9 @@
             <Font size="8.0" />
          </font>
       </Text>
-      <ImageView fitHeight="129.0" fitWidth="142.0" layoutX="135.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="59.0" fitWidth="199.0" layoutX="101.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/bpanther.png" />
+            <Image url="@../images/logoFinal.png" />
          </image>
       </ImageView>
    </children>

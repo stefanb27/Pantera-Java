@@ -344,7 +344,6 @@ public class Ui {
         //System.out.println("Requested: " + friendshipService.getUsersMatched(friendshipService.getAllRequest(id)));
     }
 
-
     /**
      * based on command executes the corresponding operation
      * @param command String

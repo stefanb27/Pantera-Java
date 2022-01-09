@@ -1,41 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="698.0" prefWidth="444.0" style="-fx-background-color: #697184;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.InboxController">
-   <top>
-      <AnchorPane prefHeight="74.0" prefWidth="422.0" style="-fx-border-style: solid;" BorderPane.alignment="CENTER">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.InboxController">
+   <children>
+      <AnchorPane prefHeight="465.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;">
          <children>
-            <Label layoutX="14.0" layoutY="22.0" prefHeight="27.0" prefWidth="114.0" text="Inbox">
+            <ListView fx:id="listView" layoutX="14.0" layoutY="64.0" onMouseClicked="#handleMouseClicked" prefHeight="373.0" prefWidth="111.0" style="-fx-border-radius: 10;" stylesheets="@../cssStyle/listView.css" />
+            <Label fx:id="firstName" alignment="CENTER_RIGHT" layoutX="115.0" layoutY="84.0" prefHeight="17.0" prefWidth="53.0" textFill="WHITE">
                <font>
-                  <Font name="Arial" size="24.0" />
+                  <Font name="Dubai Regular" size="16.0" />
                </font>
             </Label>
+            <Label fx:id="lastName" layoutX="231.0" layoutY="84.0" prefHeight="17.0" prefWidth="53.0" textFill="WHITE">
+               <font>
+                  <Font name="Dubai Regular" size="16.0" />
+               </font>
+            </Label>
+            <Text fill="WHITE" layoutX="238.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chats">
+               <font>
+                  <Font name="Dubai Bold" size="16.0" />
+               </font>
+            </Text>
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutX="128.0" layoutY="84.0" prefHeight="321.0" prefWidth="260.0" stylesheets="@../cssStyle/scrollPane.css" vbarPolicy="NEVER">
+               <content>
+                  <VBox fx:id="chatBox" onMouseMoved="#handleHover" prefHeight="317.0" prefWidth="258.0" style="-fx-border-color: #0DF6E3; -fx-border-radius: 10;">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets></VBox>
+               </content>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </ScrollPane>
+            <Text fill="WHITE" layoutX="46.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Friends">
+               <font>
+                  <Font name="Dubai Bold" size="16.0" />
+               </font>
+            </Text>
+            <Button fx:id="sendButton" layoutX="317.0" layoutY="411.0" mnemonicParsing="false" onAction="#handleSendButton" prefHeight="30.0" prefWidth="63.0" style="-fx-background-radius: 10;" stylesheets="@../cssStyle/buttonLOGIN.css" text="Send">
+               <font>
+                  <Font name="Dubai Bold" size="12.0" />
+               </font>
+            </Button>
+            <TextField fx:id="sendTextField" layoutX="137.0" layoutY="411.0" prefHeight="28.0" prefWidth="175.0" style="-fx-border-radius: 8;" stylesheets="@../backup/textField.css" />
+            <Line endX="71.00001525878906" endY="-3.814697265625E-6" layoutX="157.0" layoutY="42.0" startX="-50.333351135253906" startY="-3.814697265625E-6" stroke="#9ea8fd" />
+            <Line endX="99.66665649414062" endY="-3.814697265625E-6" layoutX="277.0" layoutY="42.0" startX="8.333328247070312" startY="-3.814697265625E-6" stroke="#9ea8fd" />
+            <Line endX="-26.333324432373047" endY="-3.814697265625E-6" layoutX="65.0" layoutY="42.0" startX="-50.333351135253906" startY="-3.814697265625E-6" stroke="#9ea8fd" />
+            <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="293.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../backup/call.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="25.0" fitWidth="19.0" layoutX="331.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../backup/video.png" />
+               </image>
+            </ImageView>
+            <TextField fx:id="nameOfUser" editable="false" layoutX="135.0" layoutY="45.0" prefHeight="49.0" prefWidth="133.0" style="-fx-background-color: transparent; -fx-text-fill: #ffffff;">
+               <font>
+                  <Font name="Dubai Regular" size="20.0" />
+               </font></TextField>
+            <Line endX="139.00003051757812" endY="-7.62939453125E-6" layoutX="239.0" layoutY="84.0" startX="-102.99998474121094" startY="-7.62939453125E-6" stroke="#0df6e3" />
+            <ImageView fitHeight="25.0" fitWidth="19.0" layoutX="361.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../backup/3p.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
-   </top>
-   <bottom>
-      <AnchorPane prefHeight="71.0" prefWidth="444.0" style="-fx-border-style: solid;" BorderPane.alignment="CENTER">
+      <AnchorPane layoutY="452.0" prefHeight="132.0" prefWidth="398.0" style="-fx-background-color: #2F2E46; -fx-background-radius: 25;">
          <children>
-            <Button fx:id="backButton" layoutX="14.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="57.0" prefWidth="78.0" text="back" />
-            <Button fx:id="deleteConversationButton" layoutX="294.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleDeleteConversationButton" prefHeight="54.0" prefWidth="134.0" text="Delete Conversation" />
+            <Line endX="-62.99998474121094" endY="-14.0" layoutX="199.0" layoutY="83.0" startX="-94.3333511352539" startY="-14.0" stroke="#9ea8fd" style="visibility: 0.4;" />
+            <AnchorPane layoutX="-4.0" layoutY="37.0" prefHeight="79.0" prefWidth="398.0">
+               <children>
+                  <Text fx:id="notif" fill="WHITE" layoutX="21.0" layoutY="35.0" onMouseEntered="#handleDragN" onMouseMoved="#handleDragNE" strokeType="OUTSIDE" strokeWidth="0.0" text="Notifications" visible="false" wrappingWidth="73.33333428700757" />
+                  <Text fx:id="home" fill="WHITE" layoutX="191.0" layoutY="36.0" onMouseEntered="#handleDragH" onMouseMoved="#handleDragHE" strokeType="OUTSIDE" strokeWidth="0.0" text="Home" visible="false" wrappingWidth="63.33333333333326" />
+                  <Text fx:id="search" fill="WHITE" layoutX="255.0" layoutY="36.0" onMouseEntered="#handleDragS" onMouseMoved="#handleDragSE" strokeType="OUTSIDE" strokeWidth="0.0" text="Search" visible="false" wrappingWidth="63.33333333333326" />
+                  <Text fx:id="prof" fill="WHITE" layoutX="320.0" layoutY="36.0" onMouseEntered="#handleDragP" onMouseMoved="#handleDragPE" strokeType="OUTSIDE" strokeWidth="0.0" text="Profile" visible="false" wrappingWidth="63.33333333333326" />
+               </children>
+            </AnchorPane>
+            <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="107.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/mess.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="profileButton" fitHeight="42.0" fitWidth="61.0" layoutX="311.0" layoutY="14.0" onMouseClicked="#handleProfileButton" onMouseEntered="#handleDragP" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/profile2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="notificationsButton" fitHeight="35.0" fitWidth="35.0" layoutX="37.0" layoutY="17.0" onMouseClicked="#handleNotificationsButton" onMouseEntered="#handleDragN" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/mega2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="homeButton" fitHeight="53.0" fitWidth="61.0" layoutX="173.0" layoutY="10.0" onMouseClicked="#handleHomeButton" onMouseEntered="#handleDragH" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/hand2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="searchButton" fitHeight="35.0" fitWidth="35.0" layoutX="250.0" layoutY="20.0" onMouseClicked="#handleSearchButton" onMouseEntered="#handleDragS" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/search2.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
-   </bottom>
-   <center>
-      <TableView fx:id="tableView" onMouseClicked="#handleMouseClicked" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #697184;" BorderPane.alignment="CENTER">
-         <columns>
-            <TableColumn fx:id="id" prefWidth="75.0" text="(pic)" visible="false" />
-            <TableColumn fx:id="firstNameColumn" prefWidth="71.99999845027924" text="First name" />
-            <TableColumn fx:id="lastNameColumn" prefWidth="92.79999542236328" text="Last name" />
-            <TableColumn fx:id="messageColumn" prefWidth="279.20001220703125" text="Message" />
-         </columns>
-      </TableView>
-   </center>
-</BorderPane>
+   </children>
+</AnchorPane>

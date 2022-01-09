@@ -5,14 +5,17 @@ import com.example.pantera.domain.Message;
 import com.example.pantera.domain.Tuple;
 import com.example.pantera.domain.User;
 import com.example.pantera.domain.validators.ValidateException;
+import com.example.pantera.events.ChangeEventType;
+import com.example.pantera.events.FriendshipChangeEvent;
 import com.example.pantera.repository.Repository;
+import com.example.pantera.utils.Observable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class MessageService {
+public class MessageService extends Observable<FriendshipChangeEvent> {
     private Repository<Long, User> userRepository;
     private Repository<Tuple<Long, Long>, Friendship> friendshipRepository;
     private Repository<Tuple<Long, Long>, Message> messageRepository;
@@ -53,7 +56,10 @@ public class MessageService {
         }
         Message message = new Message(from, string, LocalDateTime.now());
         message.setTo(toUsersWithoutDuplicates);
-        messageRepository.save(message);
+        Message message1 = messageRepository.save(message);
+        if(message1 != null){
+            notifyObservers(new FriendshipChangeEvent(ChangeEventType.ADD, message));
+        }
     }
 
     /**
