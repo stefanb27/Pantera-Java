@@ -2,6 +2,7 @@ package com.example.pantera.utils;
 
 import com.example.pantera.domain.Connection;
 import com.example.pantera.domain.NotificationsWrapper;
+import com.example.pantera.domain.Page;
 import com.example.pantera.domain.User;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
@@ -33,7 +34,7 @@ public class NotificationsCell extends ListCell<NotificationsWrapper> {
     Button addButton = new Button();
     @FXML
     Button deleteButton = new Button();
-    User loggedUser;
+    Page loggedUser;
     NotificationsWrapper user;
 
     Connection connection = new Connection();
@@ -45,7 +46,7 @@ public class NotificationsCell extends ListCell<NotificationsWrapper> {
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
 
 
-    public NotificationsCell(User loggedUser) {
+    public NotificationsCell(Page loggedUser) {
         super();
         this.loggedUser = loggedUser;
 
@@ -71,6 +72,7 @@ public class NotificationsCell extends ListCell<NotificationsWrapper> {
         addButton.setText("Friend");
         addButton.setDisable(true);
         deleteButton.setDisable(true);
+        loggedUser.addFriend(userDBRepository.findOne(user.getId())); //paging
     }
 
     public void handleDeleteButton(NotificationsWrapper user) {

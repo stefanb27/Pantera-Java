@@ -209,4 +209,8 @@ public class UserDBRepository implements Repository<Long, User> {
         return null;
     }
 
+    public List<User> getAll(){
+        return (List<User>) findAll();
+    }
+
 }

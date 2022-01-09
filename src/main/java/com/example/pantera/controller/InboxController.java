@@ -1,5 +1,6 @@
 package com.example.pantera.controller;
 
+import com.example.pantera.Main;
 import com.example.pantera.domain.*;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
@@ -30,6 +31,8 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class InboxController implements Observer<FriendshipChangeEvent> {
     Connection connection = new Connection();
@@ -59,6 +62,8 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
     private Text search;
 
     @FXML
+    private ImageView toGroup;
+    @FXML
     private TextField nameOfUser;
     @FXML
     private ImageView searchButton;
@@ -79,6 +84,7 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
     @FXML
     private ScrollPane scrollPane;
 
+
     @FXML
     private void initialize() {}
 
@@ -88,8 +94,12 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
         this.user = user;
         this.menuButtonsController = new MenuButtonsController(dialogStage, user);
         this.sendButton.setDisable(true);
-        List<User> model = (List<User>) friendshipService.getAllFriends(user.getId());
+        List<User> model = (List<User>) user.getFriends();
+        System.out.println(user.getFriends().size());
+        //model.add(new Group("fsd", "Fsdds", "fsd", "fsdf", new ArrayList<>()));
         usersModel.setAll(model);
+        //usersModel.add(new Group("das", "das", "das", "das", new ArrayList<>()));
+
         listView.setItems(usersModel);
         messageService.addObserver(this);
         chatBox.setPadding(new Insets(0, 5, 0, 5));
@@ -98,6 +108,8 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
     private void uploadData(Long newUser) {
         chatBox.getChildren().clear();
         List<Message> messages = controllerService.getConversation(user.getId(), newUser);
+//        List<Message> messages = new ArrayList<>();
+//        for(Message ms : m){ if(ms.getFrom().equals(newUser) || ms.getTo().equals(newUser)) messages.add(ms);}
         for (Message message : messages) {
             String messageUpper = message.getMessage();
             if(messageUpper.length() != 0) {
@@ -115,17 +127,32 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
 
             HBox hboxReply = new HBox();
 
-            hBox.getChildren().add(label);
-            if(message.getFrom().equals(user.getId()))
-                hBox.setAlignment(Pos.BASELINE_RIGHT);
-            else
-                hBox.setAlignment(Pos.BASELINE_LEFT);
 
+            ImageView replyButton = new ImageView("X:\\pantera\\src\\main\\resources\\images\\reply.png");
+            replyButton.setFitHeight(15);
+            replyButton.setFitWidth(15);
+
+            if(message.getFrom().equals(user.getId())){
+                hBox.getChildren().add(replyButton);
+                hBox.getChildren().add(label);
+                hBox.setAlignment(Pos.BASELINE_RIGHT);
+            } else {
+                hBox.getChildren().add(label);
+                hBox.getChildren().add(replyButton);
+                hBox.setAlignment(Pos.BASELINE_LEFT);
+            }
             //hBox.setStyle("");
             //hBox.setMinWidth(Region.USE_PREF_SIZE);
             chatBox.getChildren().add(hBox);
             chatBox.setSpacing(10);
         }
+        //to continue
+        //inca un for pentru grupuri aici
+        /*
+        for(){
+
+        }
+         */
         scrollPane.setVvalue(1.0);
         messagesModel.setAll(messages);
     }
@@ -150,12 +177,18 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
         uploadData(listView.getSelectionModel().getSelectedItem().getId()); //(sendToUser.get(0));
     }
 
+    //aici trimit mesajul prin send button
     public void handleSendButton() {
         if (sendTextField.getText() != null) {
             messageService.sendMessage(user.getId(), sendToUser, sendTextField.getText());
             sendTextField.clear();
         }
-        //userPage.addMessage(new Message(user.getId(), sendTextField.getText(), LocalDateTime.now()));
+        user.addMessage(new Message(user.getId(), sendTextField.getText(), LocalDateTime.now()));
+    }
+
+    public boolean isAGroup(){
+
+        return true;
     }
 
     public void handleNotificationsButton() {
@@ -172,6 +205,14 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
 
     public void handleProfileButton() {
         menuButtonsController.moveToProfileButton();
+    }
+
+    public void handleToGroup(){
+        menuButtonsController.moveToGroupController();
+    }
+
+    public void handleToInbox(){
+        menuButtonsController.moveToInboxController();
     }
 
     class UpdateTask extends TimerTask{

@@ -47,7 +47,7 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
     private final ObservableList<User> myFriendsModel = FXCollections.observableArrayList();
 
     private Stage dialogStage;
-    private User user;
+    private Page user;
 
     @FXML
     private ImageView searchButton;

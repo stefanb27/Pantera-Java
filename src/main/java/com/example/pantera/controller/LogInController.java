@@ -66,13 +66,16 @@ public class LogInController {
             passwordText.setText("");
             usernameText.setPromptText("Invalid login credentials");
         } else {
+            loadPage(user);
             runUser(user);
         }
     }
 
     public void loadPage(Page user){
-        user.setFriends(controllerService.findFriends(user));
-       // for(User )
+        user.setFriends(controllerService.findFriends(user)); //pt profile
+        user.setRequestsReceived(controllerService.notificationsFilter(user));
+        user.setRequestsSent(controllerService.findRequestSent(user));
+        user.setMessages(controllerService.findAllMessForAnUser(user));
     }
 
     public void runUser(Page user){
