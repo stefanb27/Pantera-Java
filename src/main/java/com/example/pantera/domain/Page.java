@@ -10,7 +10,7 @@ public class Page extends User{
 
     List<Message> messages;
     List<User> friends;
-    List<Long> requestsReceived;
+    List<NotificationsWrapper> requestsReceived;
     List<Long> requestsSent;
 
     public List<Message> getMessages() {
@@ -22,7 +22,7 @@ public class Page extends User{
         return friends;
     }
 
-    public List<Long> getRequestsReceived() {
+    public List<NotificationsWrapper> getRequestsReceived() {
         return requestsReceived;
     }
 
@@ -34,11 +34,13 @@ public class Page extends User{
         this.messages = messages;
     }
 
+    public  void addFriend(User user){ this.friends.add(user); }
+
     public void setFriends(List<User> friends) {
         this.friends = friends;
     }
 
-    public void setRequestsReceived(List<Long> requests) {
+    public void setRequestsReceived(List<NotificationsWrapper> requests) {
         this.requestsReceived = requests;
     }
 

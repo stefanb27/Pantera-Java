@@ -35,7 +35,7 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     MenuButtonsController menuButtonsController;
 
     private Stage dialogStage;
-    private User user;
+    private Page user;
     private final ObservableList<NotificationsWrapper> friendshipsModel = FXCollections.observableArrayList();
 
 
@@ -64,7 +64,8 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
         uploadData();
     }
     private void uploadData() {
-        List<NotificationsWrapper> result = controllerService.notificationsFilter(user);
+        List<NotificationsWrapper> result = user.getRequestsReceived();
+                //controllerService.notificationsFilter(user);
         friendshipsModel.setAll(result);
         listView.setCellFactory(param -> new NotificationsCell(user));
         listView.setItems(friendshipsModel);
