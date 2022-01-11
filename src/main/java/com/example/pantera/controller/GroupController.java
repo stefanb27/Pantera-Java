@@ -5,24 +5,21 @@ import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
 import com.example.pantera.events.FriendshipChangeEvent;
 import com.example.pantera.repository.db.FriendshipDBRepository;
+import com.example.pantera.repository.db.GroupDBRepository;
 import com.example.pantera.repository.db.MessageDBRepository;
 import com.example.pantera.repository.db.UserDBRepository;
 import com.example.pantera.service.*;
 import com.example.pantera.utils.GroupCell;
 import com.example.pantera.utils.Observer;
-import com.example.pantera.utils.SearchCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +27,14 @@ public class GroupController implements Observer<FriendshipChangeEvent> {
     Connection connection = new Connection();
     UserDBRepository userDBRepository = new UserDBRepository(connection);
     FriendshipDBRepository friendshipDBRepository = new FriendshipDBRepository(connection);
+    GroupDBRepository groupDBRepository = new GroupDBRepository(connection);
     UserService userService = new UserService(userDBRepository, friendshipDBRepository, new UserValidator());
     FriendshipService friendshipService = new FriendshipService(userDBRepository, friendshipDBRepository, new FriendshipValidator());
     MessageDBRepository messageDBRepository = new MessageDBRepository(connection);
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
     ControllerService controllerService = new ControllerService(userDBRepository, friendshipDBRepository, messageDBRepository, connection);
-    GroupServiceDB groupServiceDB = new GroupServiceDB(userDBRepository, friendshipDBRepository, messageDBRepository, connection);
-
     MenuButtonsController menuButtonsController;
+
     private Stage dialogStage;
     private Page user;
     GroupCell groupCell;
@@ -77,9 +74,10 @@ public class GroupController implements Observer<FriendshipChangeEvent> {
     }
 
     private void uploadData() {
-        List<User> model = controllerService.searchListFilter(user);
+        List<User> model = (List<User>) friendshipService.getAllFriends(user.getId());
         usersModel.setAll(model);
         //groupCell = new GroupCell(user);
+        groupGuys.add(user);
         listView.setCellFactory(p -> new GroupCell(user, groupGuys));
         //listView.getCellFactory().getClass().;
         listView.setItems(usersModel);
@@ -118,11 +116,9 @@ public class GroupController implements Observer<FriendshipChangeEvent> {
     public void handleInboxButton() { menuButtonsController.moveToInboxController();}
 
     public void handleCreateGroup(){
-        //listView.getCellFactory().
-        System.out.println(groupGuys.size());
-        Group newGroup = new Group(groupName.getText(), "", "", "", groupGuys);
-        //aici salvez grupul in memorie
-        newGroup.setId(groupServiceDB.getIdMax());
-        groupServiceDB.save(newGroup);
+        if (!groupName.getText().equals("") && groupGuys.size() != 1) {
+            Group newGroup = new Group(groupGuys, groupName.getText());
+            groupDBRepository.save(newGroup);
+        }
     }
 }

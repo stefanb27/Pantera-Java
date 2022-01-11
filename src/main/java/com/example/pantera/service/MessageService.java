@@ -46,7 +46,7 @@ public class MessageService extends Observable<FriendshipChangeEvent> {
      * @param string the message
      * @throws ValidateException if there are no friends in the list
      */
-    public void sendMessage(Long from, List<Long> toUsers, String string) {
+    public void sendMessage(Long from, List<Long> toUsers, String string, Long reply, Long group) {
         User fromUser = userRepository.findOne(from);
         List<Long> toUsersWithoutDuplicates = new ArrayList<>(new HashSet<>(toUsers));
         toUsersWithoutDuplicates.forEach(x -> userRepository.findOne(x));
@@ -56,6 +56,8 @@ public class MessageService extends Observable<FriendshipChangeEvent> {
         }
         Message message = new Message(from, string, LocalDateTime.now());
         message.setTo(toUsersWithoutDuplicates);
+        message.setGroup(group);
+        message.setReply(reply);
         Message message1 = messageRepository.save(message);
         if(message1 != null){
             notifyObservers(new FriendshipChangeEvent(ChangeEventType.ADD, message));

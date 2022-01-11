@@ -15,6 +15,7 @@ public class MessageDBRepository implements Repository<Tuple<Long, Long>, Messag
     private String username;
     private String password;
     private Connection connection;
+
     public MessageDBRepository(String url, String username, String password) {
         this.url = url;
         this.username = username;
@@ -102,6 +103,7 @@ public class MessageDBRepository implements Repository<Tuple<Long, Long>, Messag
                 Long id1 = resultSet.getLong("fromuser");
                 Long id2 = resultSet.getLong("touser");
                 String string = resultSet.getString("message");
+                Long reply = resultSet.getLong("reply");
                 LocalDateTime dateTime = resultSet.getTimestamp("date").toLocalDateTime();
 
                 Message message = new Message(id1, string, dateTime);
@@ -109,8 +111,9 @@ public class MessageDBRepository implements Repository<Tuple<Long, Long>, Messag
                 message.setId(t);
                 message.addUserMessage(id2);
                 messages.add(message);
-                Message reply = findReply(id, message);
                 message.setReply(reply);
+                //Message reply = findReply(id, message);
+                //message.setReply(reply);
             }
             return messages;
         } catch (SQLException e) {
@@ -129,7 +132,7 @@ public class MessageDBRepository implements Repository<Tuple<Long, Long>, Messag
     public Message save(Message entity) {
         String sql = "insert into conversations (fromuser, message, date) values (?, ?, ?)";
         String sql2 = "select * from conversations where id=(select max(id) from conversations)";
-        String sql3 = "insert into messages (idm, touser) values (?, ?)";
+        String sql3 = "insert into messages (idm, touser, reply, groupcolumn) values (?, ?, ?, ?)";
         try (java.sql.Connection con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             PreparedStatement ps2 = con.prepareStatement(sql2);
@@ -145,6 +148,10 @@ public class MessageDBRepository implements Repository<Tuple<Long, Long>, Messag
                 for (int i = 0; i < entity.getTo().size(); i++) {
                     ps3.setLong(1, idM);
                     ps3.setLong(2, entity.getTo().get(i));
+                    if (entity.getReply() == null) ps3.setLong(3, 0);
+                    else ps3.setLong(3, entity.getReply());
+                    if (entity.getGroup() == null) ps3.setLong(4, 0);
+                    else ps3.setLong(4, entity.getGroup());
                     ps3.executeUpdate();
                 }
             }

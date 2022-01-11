@@ -16,7 +16,7 @@
             <Button fx:id="createGroup" layoutX="199.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#handleCreateGroup" prefHeight="21.0" prefWidth="151.0" stylesheets="@../cssStyle/buttonLOGIN.css" text="Create Group" />
             <ImageView fx:id="arrowBack" fitHeight="19.0" fitWidth="21.0" layoutX="14.0" layoutY="14.0" onMouseClicked="#handleInboxButton" pickOnBounds="true" preserveRatio="true" rotate="180.0">
                <image>
-                  <Image url="@../images/arrow%20.png" />
+                  <Image url="@../images/arrow .png" />
                </image>
             </ImageView>
             <TextField fx:id="groupName" layoutX="42.0" layoutY="46.0" promptText="Type Group Name" stylesheets="@../cssStyle/textField.css" />

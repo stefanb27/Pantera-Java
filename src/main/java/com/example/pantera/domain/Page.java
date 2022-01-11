@@ -57,6 +57,7 @@ public class Page extends User{
     }
 
     public void addMessage(Message message){
+        //cool
         messages.add(message);
     }
 

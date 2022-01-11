@@ -8,6 +8,7 @@ public class User extends Entity<Long>{
     private String firstName;
     private String lastName;
     private List<User> friends = new ArrayList<>();
+    private List<Group> groups = new ArrayList<>();
     private String email;
     private String password;
 
@@ -16,6 +17,14 @@ public class User extends Entity<Long>{
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     public String getFirstName() {

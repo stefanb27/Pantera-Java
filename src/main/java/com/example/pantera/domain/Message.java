@@ -6,17 +6,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Message extends Entity<Tuple<Long, Long>> {
-    private Message reply = null;
+    private Long reply;
     private Long from;
     private List<Long> to = new ArrayList<>();
     private String message;
     private LocalDateTime date;
+    private Long group;
 
     public Message(Long from, String message, LocalDateTime date) {
         this.from = from;
         this.message = message;
         this.date = date;
         //this.reply = reply;
+    }
+
+    public Long getGroup() {
+        return group;
+    }
+
+    public void setGroup(Long group) {
+        this.group = group;
     }
 
     public Long getFrom() {
@@ -31,7 +40,7 @@ public class Message extends Entity<Tuple<Long, Long>> {
         return to;
     }
 
-    public Message getReply() { return reply; }
+    public Long getReply() { return reply; }
 
     public void setTo(List<Long> to) {
         this.to = to;
@@ -45,7 +54,7 @@ public class Message extends Entity<Tuple<Long, Long>> {
         return message;
     }
 
-    public void setReply(Message message) {
+    public void setReply(Long message) {
         this.reply = message;
     }
 

@@ -1,8 +1,6 @@
 package com.example.pantera.controller;
 
 import com.example.pantera.domain.Page;
-import com.example.pantera.domain.User;
-import com.example.pantera.utils.GroupCell;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;

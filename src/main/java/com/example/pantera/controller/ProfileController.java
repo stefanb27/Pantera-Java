@@ -91,7 +91,6 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
     }
 
     public void uploadData() {
-        System.out.println("da");
         Iterable<User> all = friendshipService.getAllFriends(user.getId());
         List<User> messageTaskList = StreamSupport.stream(all.spliterator(), false)
                 .collect(Collectors.toList());

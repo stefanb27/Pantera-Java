@@ -41,11 +41,10 @@ public class ProfileCell extends ListCell<User> {
         this.button.getStylesheets().add("cssStyle/buttonLOGIN.css");
         hbox.getChildren().addAll(label, pane, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
-        button.setOnAction(event -> handleAddButton(user));
-        //button.setStyle("\"@../cssStyle/buttonLOGIN.css\"");
+        button.setOnAction(event -> handleDeleteButton(user));
     }
 
-    public void handleAddButton(User user) {
+    public void handleDeleteButton(User user) {
         friendshipService.deleteFriendship(loggedUser.getId(), user.getId());
         loggedUser.removeFriend(user);
     }

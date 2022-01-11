@@ -2,16 +2,25 @@ package com.example.pantera.domain;
 
 import java.util.List;
 
-public class Group extends User{
+public class Group extends Entity<Long>{
     List<User> groupGuys;
-    public Group(String firstName, String lastName, String email, String password, List<User> groupGuys) {
-        super(firstName, lastName, email, password);
+    String name;
+
+    public Group(List<User> groupGuys, String name) {
         this.groupGuys = groupGuys;
+        this.name = name;
     }
 
     public List<User> getGroupGuys(){
         return groupGuys;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

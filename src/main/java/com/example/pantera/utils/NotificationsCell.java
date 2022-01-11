@@ -52,8 +52,8 @@ public class NotificationsCell extends ListCell<NotificationsWrapper> {
 
         this.addButton.getStylesheets().add("cssStyle/buttonLOGIN.css");
         this.deleteButton.getStylesheets().add("cssStyle/buttonLOGIN.css");
-        ImageView imageView1 = new ImageView("X:\\pantera\\src\\main\\resources\\images\\check.png");
-        ImageView imageView2 = new ImageView("X:\\pantera\\src\\main\\resources\\images\\x.png");
+        ImageView imageView1 = new ImageView("D:\\ubb\\semestrul III\\metode avansate\\pantera\\src\\main\\resources\\images\\check.png");
+        ImageView imageView2 = new ImageView("D:\\ubb\\semestrul III\\metode avansate\\pantera\\src\\main\\resources\\images\\x.png");
         imageView1.setFitWidth(13);
         imageView2.setFitWidth(13);
         imageView1.setFitHeight(13);

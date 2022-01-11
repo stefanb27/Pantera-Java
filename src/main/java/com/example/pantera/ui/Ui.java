@@ -258,7 +258,7 @@ public class Ui {
         System.out.println("Type...");
         String message = scanner.nextLine();
         try {
-            messageService.sendMessage(id, toUsers, message);
+            messageService.sendMessage(id, toUsers, message, null, null);
             System.out.println("Delivered at: " + LocalDateTime.now());
         } catch (ValidateException e) {
             System.out.println(e.getMessage());
@@ -290,7 +290,7 @@ public class Ui {
                         msg.getFrom() + " " + msg.getTo());
             } else {
                 System.out.println("User with id " + msg.getFrom() + " responded: " + msg.getMessage() +
-                        " at reply: " + msg.getReply() + " from " + msg.getReply().getFrom());
+                        " at reply: " + msg.getReply() + " from " + msg.getReply());
             }
         }
     }
