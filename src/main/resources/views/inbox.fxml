@@ -36,7 +36,7 @@
             </Text>
             <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutX="128.0" layoutY="84.0" prefHeight="321.0" prefWidth="260.0" stylesheets="@../cssStyle/scrollPane.css" vbarPolicy="NEVER">
                <content>
-                  <VBox fx:id="chatBox" onMouseMoved="#handleHover" prefHeight="317.0" prefWidth="258.0" style="-fx-border-color: #0DF6E3; -fx-border-radius: 10;">
+                  <VBox fx:id="chatBox" prefHeight="317.0" prefWidth="258.0" style="-fx-border-color: #0DF6E3; -fx-border-radius: 10;">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets></VBox>
@@ -55,28 +55,28 @@
                   <Font name="Dubai Bold" size="12.0" />
                </font>
             </Button>
-            <TextField fx:id="sendTextField" layoutX="137.0" layoutY="411.0" prefHeight="28.0" prefWidth="175.0" style="-fx-border-radius: 8;" stylesheets="@../backup/textField.css" />
+            <TextField fx:id="sendTextField" layoutX="137.0" layoutY="411.0" prefHeight="28.0" prefWidth="175.0" style="-fx-border-radius: 8;" stylesheets="@../cssStyle/textField.css" />
             <Line endX="71.00001525878906" endY="-3.814697265625E-6" layoutX="157.0" layoutY="42.0" startX="-50.333351135253906" startY="-3.814697265625E-6" stroke="#9ea8fd" />
             <Line endX="99.66665649414062" endY="-3.814697265625E-6" layoutX="277.0" layoutY="42.0" startX="8.333328247070312" startY="-3.814697265625E-6" stroke="#9ea8fd" />
             <Line endX="-26.333324432373047" endY="-3.814697265625E-6" layoutX="65.0" layoutY="42.0" startX="-50.333351135253906" startY="-3.814697265625E-6" stroke="#9ea8fd" />
             <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="293.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../backup/call.png" />
+                  <Image url="@../images/call.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="25.0" fitWidth="19.0" layoutX="331.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../backup/video.png" />
+                  <Image url="@../images/video.png" />
                </image>
             </ImageView>
-            <TextField fx:id="nameOfUser" editable="false" layoutX="135.0" layoutY="45.0" prefHeight="49.0" prefWidth="133.0" style="-fx-background-color: transparent; -fx-text-fill: #ffffff;">
+            <TextField fx:id="nameOfUser" editable="false" layoutX="135.0" layoutY="45.0" prefHeight="49.0" prefWidth="161.0" style="-fx-background-color: transparent; -fx-text-fill: #ffffff;">
                <font>
                   <Font name="Dubai Regular" size="20.0" />
                </font></TextField>
             <Line endX="139.00003051757812" endY="-7.62939453125E-6" layoutX="239.0" layoutY="84.0" startX="-102.99998474121094" startY="-7.62939453125E-6" stroke="#0df6e3" />
-            <ImageView fitHeight="25.0" fitWidth="19.0" layoutX="361.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="toGroup" fitHeight="25.0" fitWidth="19.0" layoutX="361.0" layoutY="60.0" onMouseClicked="#handleToGroup" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../backup/3p.png" />
+                  <Image url="@../images/3p.png" />
                </image>
             </ImageView>
          </children>

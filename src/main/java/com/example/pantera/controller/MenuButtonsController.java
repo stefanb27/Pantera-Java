@@ -1,7 +1,6 @@
 package com.example.pantera.controller;
 
 import com.example.pantera.domain.Page;
-import com.example.pantera.domain.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -104,12 +103,32 @@ public class MenuButtonsController {
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
 
-            InboxController notificationsController = loader.getController();
-            notificationsController.setService(dialogStage, user);
+            InboxController inboxController = loader.getController();
+            inboxController.setService(dialogStage, user);
             dialogStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public void moveToGroupController() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/group.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Group");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            GroupController groupController = loader.getController();
+            groupController.setService(dialogStage, user);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

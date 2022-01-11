@@ -25,7 +25,6 @@ public abstract class AbstractFileRepository<ID, E extends Entity<ID>> extends I
                 List<String> attributes = Arrays.asList(line.split(";"));
                 E entity = extractEntity(attributes);
                 super.save(entity);
-                System.out.println(line);
                 //}
             }
         } catch (FileNotFoundException e) {

@@ -1,6 +1,6 @@
 package com.example.pantera.controller;
 
-import com.example.pantera.domain.Page;
+import com.example.pantera.domain.*;
 import com.example.pantera.service.ControllerService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,8 +11,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import com.example.pantera.domain.Connection;
-import com.example.pantera.domain.User;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
 import com.example.pantera.repository.db.FriendshipDBRepository;
@@ -60,19 +58,21 @@ public class LogInController {
         String email = usernameText.getText();
         String password = passwordText.getText();
         Page user = controllerService.checkLogIn(email, password);
-        System.out.println(user);
         if (user == null) {
             usernameText.setText("");
             passwordText.setText("");
             usernameText.setPromptText("Invalid login credentials");
         } else {
+            loadPage(user);
             runUser(user);
         }
     }
 
     public void loadPage(Page user){
-        user.setFriends(controllerService.findFriends(user));
-       // for(User )
+        user.setFriends(controllerService.findFriends(user)); //pt profile
+        user.setRequestsReceived(controllerService.notificationsFilter(user));
+        user.setRequestsSent(controllerService.findRequestSent(user));
+        user.setMessages(controllerService.findAllMessForAnUser(user));
     }
 
     public void runUser(Page user){

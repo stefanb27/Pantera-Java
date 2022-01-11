@@ -1,6 +1,7 @@
 package com.example.pantera.utils;
 
 import com.example.pantera.domain.Connection;
+import com.example.pantera.domain.Page;
 import com.example.pantera.domain.User;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
@@ -13,7 +14,6 @@ import com.example.pantera.service.UserService;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -22,8 +22,8 @@ public class ProfileCell extends ListCell<User> {
     HBox hbox = new HBox();
     Label label = new Label("");
     Pane pane = new Pane();
-    Button button = new Button();
-    User loggedUser;
+    Button button = new Button("Remove");
+    Page loggedUser;
     User user;
 
     Connection connection = new Connection();
@@ -35,14 +35,10 @@ public class ProfileCell extends ListCell<User> {
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
 
 
-    public ProfileCell(User loggedUser) {
+    public ProfileCell(Page loggedUser) {
         super();
         this.loggedUser = loggedUser;
         this.button.getStylesheets().add("cssStyle/buttonLOGIN.css");
-        ImageView imageView2 = new ImageView("X:\\pantera\\src\\main\\resources\\images\\x.png");
-        imageView2.setFitWidth(13);
-        imageView2.setFitHeight(13);
-        this.button.setGraphic(imageView2);
         hbox.getChildren().addAll(label, pane, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
         button.setOnAction(event -> handleDeleteButton(user));
@@ -50,6 +46,7 @@ public class ProfileCell extends ListCell<User> {
 
     public void handleDeleteButton(User user) {
         friendshipService.deleteFriendship(loggedUser.getId(), user.getId());
+        loggedUser.removeFriend(user);
     }
 
     @Override

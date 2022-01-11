@@ -1,0 +1,64 @@
+.label {
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 15;
+    -fx-border-color: #8284AD;
+    -fx-background-color: #2F2E46;
+    -fx-background-radius: 20;
+}
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: #0DF6E3;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-text-fill: #ffffff;
+}
+.text{
+    -fx-fill: #ffffff;
+}
+.text .content{
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 15;
+    -fx-border-color: #8284AD;
+    -fx-background-color: #2F2E46;
+    -fx-background-radius: 20;
+}
+
+vbox{
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 15;
+    -fx-border-color: #8284AD;
+    -fx-background-color: #2F2E46;
+    -fx-background-radius: 20;
+}
+hbox{
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 15;
+    -fx-border-color: #8284AD;
+    -fx-background-color: #2F2E46;
+    -fx-background-radius: 20;
+}
+.text-area {
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 15;
+    -fx-border-color: #8284AD;
+    -fx-background-color: #2F2E46;
+    -fx-background-radius: 20;
+}
+
+.text-area .content{
+    -fx-background-color: #2F2E46;
+}
+
+.text-area .scroll-bar:vertical:disabled {
+    -fx-opacity: 0;
+}
+
+.text-area .scroll-bar:vertical {
+    -fx-pref-width: 1;
+    -fx-opacity: 0;
+}
+.text-area .scroll-bar:horizontal {
+    -fx-pref-height: 1;
+    -fx-opacity: 0;
+}
