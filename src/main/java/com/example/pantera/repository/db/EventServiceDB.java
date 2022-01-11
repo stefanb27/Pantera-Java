@@ -42,11 +42,12 @@ public class EventServiceDB {
              PreparedStatement ps = con.prepareStatement(sql)) {
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
+                Long idEvent = resultSet.getLong(1);
                 String nameEvent = resultSet.getString(2);
                 String createdBy = resultSet.getString(3);
                 String dateTime = resultSet.getString(4);
                 String hours = resultSet.getString(5);
-                Event event = new Event(nameEvent, createdBy, dateTime, hours);
+                Event event = new Event(nameEvent, createdBy, dateTime, hours); event.setId(idEvent);
                 events.add(event);
             }
             return events;
@@ -56,4 +57,41 @@ public class EventServiceDB {
         return events;
     }
 
+    public void saveUserEvent(Long idUser, Long idEvent){
+        String sql = "insert into eventuser (idevent, iduser) values (?, ?)";
+        try (java.sql.Connection con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, idEvent);
+            ps.setLong(2, idUser);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deletUserEvent(Long idUser, Long idEvent){
+        String sql = "delete from eventuser where idevent = ? and iduser = ?";
+        try (java.sql.Connection con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, idEvent);
+            ps.setLong(2, idUser);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isGoing(Long idUser, Long idEvent){
+        String sql = "select * from eventuser where idevent = ? and iduser = ?";
+        try (java.sql.Connection con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, idEvent);
+            ps.setLong(2, idUser);
+            ResultSet resultSet = ps.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

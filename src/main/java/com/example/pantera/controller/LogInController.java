@@ -21,6 +21,9 @@ import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LogInController {
     Connection connection = new Connection();
@@ -57,7 +60,8 @@ public class LogInController {
     public void onLoginButtonClick() {
         String email = usernameText.getText();
         String password = passwordText.getText();
-        Page user = controllerService.checkLogIn(email, password);
+        String hashedPass = controllerService.hashPassword(password);
+        Page user = controllerService.checkLogIn(email, hashedPass);
         if (user == null) {
             usernameText.setText("");
             passwordText.setText("");

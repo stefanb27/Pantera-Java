@@ -3,9 +3,14 @@ package com.example.pantera.service;
 import com.example.pantera.domain.*;
 import com.example.pantera.repository.Repository;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -456,6 +461,167 @@ public class ControllerService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String hashPassword(String password) {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] encodedhash = digest.digest(
+                password.getBytes(StandardCharsets.UTF_8));
+        StringBuilder hexString = new StringBuilder(2 * encodedhash.length);
+        for (int i = 0; i < encodedhash.length; i++) {
+            String hex = Integer.toHexString(0xff & encodedhash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
+    public List<User> getMyFriendsInGivenDate(User user, LocalDate date) {
+        List<User> users = new ArrayList<>();
+        String sql = "select * from friendships where (id1 = ? or id2 = ?) " +
+                "and date = ? and status = ?";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, user.getId());
+            ps.setLong(2, user.getId());
+            ps.setDate(3, Date.valueOf(date));
+            ps.setString(4, "approved");
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Long id1 = resultSet.getLong(1);
+                Long id2 = resultSet.getLong(2);
+                Long finalId = id1;
+                if (id1.equals(user.getId())) finalId = id2;
+                users.add(userRepository.findOne(finalId));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public List<Message> getConversationsDate(Long user1, LocalDate pickedDate) {
+        List<Message> messages = new ArrayList<>();
+        String sql = "select messages.id, messages.idm, messages.touser, conversations.fromuser, " +
+                "conversations.message, conversations.date, messages.reply from messages " +
+                "inner join conversations on messages.idm = conversations.id " +
+                "where messages.touser = ? " +
+                "and messages.groupcolumn = 0 and conversations.date = ?";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, user1);
+            ps.setDate(2, Date.valueOf(pickedDate));
+            ResultSet resultSet = ps.executeQuery();
+            int nr = 0;
+            while (resultSet.next()) {
+                Long id = resultSet.getLong(1);
+                Long idm = resultSet.getLong(2);
+                Long touser = resultSet.getLong(3);
+                Long fromuser = resultSet.getLong(4);
+                String message = resultSet.getString(5);
+                LocalDateTime date = resultSet.getTimestamp(6).toLocalDateTime();
+                Long reply = resultSet.getLong(7);
+                Message message1 = new Message(fromuser, message, date);
+                List<Long> to = new ArrayList<>();
+                to.add(touser);
+                message1.setTo(to);
+                message1.setId(new Tuple<>(id, idm));
+                message1.setReply(reply);
+                messages.add(message1);
+            }
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
+    public List<Message> getGroupConversationsDate(Long user1, LocalDate pickedDate) {
+        List<Message> messages = new ArrayList<>();
+        String sql = "select messages.id, messages.idm, messages.touser, messages.groupcolumn, conversations.fromuser, " +
+                "conversations.message, conversations.date, messages.reply from messages " +
+                "inner join conversations on messages.idm = conversations.id " +
+                "where (messages.touser = ? or conversations.fromuser = ?) and " +
+                "messages.groupcolumn != 0 and conversations.date = ? " +
+                "order by messages.groupcolumn, conversations.date";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+//            ps.setLong(1, user1);
+//            ps.setLong(2, user1);
+            ps.setLong(1, user1);
+            ps.setLong(2, user1);
+            ps.setDate(3, Date.valueOf(pickedDate));
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                Long id = resultSet.getLong(1);
+                Long idm = resultSet.getLong(2);
+                Long touser = resultSet.getLong(3);
+                Long group = resultSet.getLong(4);
+                Long fromuser = resultSet.getLong(5);
+                String message = resultSet.getString(6);
+                LocalDateTime date = resultSet.getTimestamp(7).toLocalDateTime();
+                Long reply = resultSet.getLong(8);
+                Message message1 = new Message(fromuser, message, date);
+                List<Long> to = new ArrayList<>();
+                to.add(touser);
+                message1.setTo(to);
+                message1.setId(new Tuple<>(id, idm));
+                message1.setReply(reply);
+                message1.setGroup(group);
+                messages.add(message1);
+            }
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return messages;
+    }
+
+    public List<Message> getConversationsFriendDate(Long user1, Long user2, LocalDate pickedDate) {
+        List<Message> messages = new ArrayList<>();
+        String sql = "select messages.id, messages.idm, messages.touser, conversations.fromuser, " +
+                "conversations.message, conversations.date, messages.reply from messages " +
+                "inner join conversations on messages.idm = conversations.id " +
+                "where ((messages.touser = ? and conversations.fromuser = ?) " +
+                "or (messages.touser = ? and conversations.fromuser = ?)) " +
+                "and messages.groupcolumn = 0 and conversations.date = ?";
+        try (java.sql.Connection  con = connection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setLong(1, user1);
+            ps.setLong(2, user2);
+            ps.setLong(3, user2);
+            ps.setLong(4, user1);
+            ps.setDate(5, Date.valueOf(pickedDate));
+            ResultSet resultSet = ps.executeQuery();
+            int nr = 0;
+            while (resultSet.next()) {
+                Long id = resultSet.getLong(1);
+                Long idm = resultSet.getLong(2);
+                Long touser = resultSet.getLong(3);
+                Long fromuser = resultSet.getLong(4);
+                String message = resultSet.getString(5);
+                LocalDateTime date = resultSet.getTimestamp(6).toLocalDateTime();
+                Long reply = resultSet.getLong(7);
+                Message message1 = new Message(fromuser, message, date);
+                List<Long> to = new ArrayList<>();
+                to.add(touser);
+                message1.setTo(to);
+                message1.setId(new Tuple<>(id, idm));
+                message1.setReply(reply);
+                messages.add(message1);
+            }
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return messages;
     }
 
 //    public List<Long> findRequestReceived(){

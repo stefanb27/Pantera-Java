@@ -13,6 +13,8 @@ import com.example.pantera.service.FriendshipService;
 import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
 import com.example.pantera.utils.Observer;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -172,7 +174,7 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
             }
             chatBox.setSpacing(10);
         }
-        scrollPane.setVvalue(1.0);
+        chatBox.heightProperty().addListener(observable -> scrollPane.setVvalue(1D));
         messagesModel.setAll(messages);
     }
 
