@@ -1,7 +1,10 @@
 package com.example.pantera.controller;
 
+import com.example.pantera.domain.Message;
 import com.example.pantera.domain.Page;
 import com.example.pantera.events.FriendshipChangeEvent;
+import com.example.pantera.printers.PdfPrinter;
+import com.example.pantera.service.ControllerService;
 import com.example.pantera.utils.Observer;
 import com.example.pantera.utils.ProfileCell;
 import com.example.pantera.utils.SearchCell;
@@ -10,12 +13,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import com.example.pantera.domain.Connection;
@@ -28,8 +30,19 @@ import com.example.pantera.repository.db.UserDBRepository;
 import com.example.pantera.service.FriendshipService;
 import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentInformation;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -43,6 +56,8 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
     MessageDBRepository messageDBRepository = new MessageDBRepository(connection);
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
     MenuButtonsController menuButtonsController;
+    ControllerService controllerService = new ControllerService(userDBRepository, friendshipDBRepository, messageDBRepository, connection);
+    PdfPrinter pdfPrinter = new PdfPrinter();
 
     private final ObservableList<User> myFriendsModel = FXCollections.observableArrayList();
 
@@ -56,16 +71,11 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
     @FXML
     private ImageView notificationsButton;
     @FXML
-    private Button editProfileButton;
+    private Button statisticsButton;
     @FXML
-    private Button settingsButton;
+    private Button friendStatisticsButton;
     @FXML
-    private Button friendsButton;
-    @FXML
-    private Button myPostsButton;
-    @FXML
-    private Button tagsButton;
-
+    private DatePicker datePicker;
     @FXML
     private ImageView inboxButton;
     @FXML
@@ -87,6 +97,8 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
         firstName.setText(user.getFirstName());
         lastName.setText(user.getLastName());
         friendshipService.addObserver(this);
+        this.datePicker.setValue(LocalDate.now());
+
         uploadData();
     }
 
@@ -97,6 +109,27 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
         listView.setCellFactory(param -> new ProfileCell(user));
         myFriendsModel.setAll(messageTaskList);
         listView.setItems(myFriendsModel);
+    }
+
+    public void handleStatisticsButton() {
+        List<User> users = controllerService.getMyFriendsInGivenDate(this.user, datePicker.getValue());
+        List<Message> privateMessages = controllerService.getConversationsDate(user.getId(), datePicker.getValue());
+        List<Message> groupMessages = controllerService.getGroupConversationsDate(user.getId(), datePicker.getValue());
+        pdfPrinter.printStatisticsForLoggedUser(user, users, privateMessages, groupMessages, datePicker.getValue());
+    }
+
+    public void handleFriendStatisticsButton() {
+        User user1 = listView.getSelectionModel().getSelectedItem();
+        List<Message> messages = controllerService.getConversationsFriendDate(user.getId(), user1.getId(), datePicker.getValue());
+        if (user1 != null)
+            pdfPrinter.printStatisticsForFriendsMessages(user, user1, messages, datePicker.getValue());
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Select an user!", ButtonType.CANCEL);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.CANCEL) {
+                alert.close();
+            }
+        }
     }
 
     @Override

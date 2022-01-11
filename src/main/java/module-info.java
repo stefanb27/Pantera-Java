@@ -25,4 +25,5 @@ module com.example.pantera {
     exports com.example.pantera.ui;
     exports com.example.pantera.utils;
     exports com.example.pantera.domain.validators;
+    requires org.apache.pdfbox;
 }
