@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import com.example.pantera.domain.validators.FriendshipValidator;
@@ -53,6 +54,10 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
 
     @FXML
     private void initialize() {
+        Tooltip.install(inboxButton, new Tooltip("Inbox"));
+        Tooltip.install(homeButton, new Tooltip("Home"));
+        Tooltip.install(searchButton, new Tooltip("Search"));
+        Tooltip.install(profileButton, new Tooltip("Profile"));
     }
 
     @FXML

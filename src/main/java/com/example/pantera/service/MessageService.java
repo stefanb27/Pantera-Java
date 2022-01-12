@@ -50,10 +50,10 @@ public class MessageService extends Observable<FriendshipChangeEvent> {
         User fromUser = userRepository.findOne(from);
         List<Long> toUsersWithoutDuplicates = new ArrayList<>(new HashSet<>(toUsers));
         toUsersWithoutDuplicates.forEach(x -> userRepository.findOne(x));
-        toUsersWithoutDuplicates.removeIf(x -> findFriendship(new Tuple(from, x)) == null);
-        if (toUsersWithoutDuplicates.size() == 0) {
-            throw new ValidateException("You are not friends");
-        }
+//        toUsersWithoutDuplicates.removeIf(x -> findFriendship(new Tuple(from, x)) == null);
+//        if (toUsersWithoutDuplicates.size() == 0) {
+//            throw new ValidateException("You are not friends");
+//        }
         Message message = new Message(from, string, LocalDateTime.now());
         message.setTo(toUsersWithoutDuplicates);
         message.setGroup(group);

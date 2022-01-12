@@ -1,20 +1,21 @@
 package com.example.pantera.controller;
 
-import com.example.pantera.domain.Event;
+import com.example.pantera.domain.NiceEvent;
 import com.example.pantera.domain.Page;
 import com.example.pantera.domain.Tuple;
-import com.example.pantera.repository.db.EventServiceDB;
+import com.example.pantera.events.FriendshipChangeEvent;
+import com.example.pantera.repository.db.EventDBRepository;
+import com.example.pantera.repository.paging.PagingRepository;
+import com.example.pantera.service.EventsService;
+import com.example.pantera.utils.Observer;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Box;
 import javafx.stage.Stage;
 import com.example.pantera.domain.Connection;
 import com.example.pantera.domain.validators.FriendshipValidator;
@@ -23,30 +24,31 @@ import com.example.pantera.repository.db.FriendshipDBRepository;
 import com.example.pantera.repository.db.UserDBRepository;
 import com.example.pantera.service.FriendshipService;
 import com.example.pantera.service.UserService;
+import javafx.util.Callback;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class HomeController {
+public class HomeController implements Observer<FriendshipChangeEvent> {
     Connection connection = new Connection();
     UserDBRepository userDBRepository = new UserDBRepository(connection);
     FriendshipDBRepository friendshipDBRepository = new FriendshipDBRepository(connection);
     UserService userService = new UserService(userDBRepository, friendshipDBRepository, new UserValidator());
     FriendshipService friendshipService = new FriendshipService(userDBRepository, friendshipDBRepository, new FriendshipValidator());
     MenuButtonsController menuButtonsController;
-    EventServiceDB eventServiceDB = new EventServiceDB(connection);
+    EventDBRepository eventDBRepository = new EventDBRepository(connection);
+    EventsService eventsService = new EventsService();
+    PagingRepository<Long, NiceEvent> pagingRepository = new EventDBRepository(connection);
 
     private Stage dialogStage;
     private Page user;
 
     @FXML
     private ScrollPane feed = new ScrollPane();
-
-    @FXML
-    private VBox vBox;
 
     @FXML
     private ImageView logo;
@@ -93,7 +95,21 @@ public class HomeController {
     private TextField numberHours;
 
     @FXML
+    private Pagination pageView;
+
+    @FXML
     private void initialize() {
+        Tooltip.install(inboxButton, new Tooltip("Inbox"));
+        Tooltip.install(notificationsButton, new Tooltip("Notifications"));
+        Tooltip.install(searchButton, new Tooltip("Search"));
+        Tooltip.install(profileButton, new Tooltip("Profile"));
+        eventsService.setPageSize(2);
+        eventsService.addObserver(this);
+//        eventsService.getAll().forEach(System.out::println);
+//        System.out.println("Elements on page 1:");
+//        eventsService.getMessagesOnPage(0).stream().forEach(System.out::println);
+//        System.out.println("Elements on page 2:");
+//        eventsService.getNextMessages().stream().forEach(System.out::println);
     }
 
     @FXML
@@ -106,9 +122,12 @@ public class HomeController {
         menuEvent.setVisible(true);
     }
 
-    public void loadEvents() {
-        List<Event> allEvents = eventServiceDB.getAllEvents();
-        for (Event event : allEvents) {
+    public VBox helper() {
+        VBox vBox = new VBox();
+        List<NiceEvent> pageList = (List<NiceEvent>) eventsService.getAll();
+        System.out.println(Math.ceil(pageList.size() / 2.0));
+        pageView.setPageCount((int) Math.ceil(pageList.size() / 2.0));
+        for (NiceEvent niceEvent : eventsService.getMessagesOnPage(pageView.getCurrentPageIndex())) {
             VBox eventBox = new VBox();
             vBox.setSpacing(10);
             vBox.setAlignment(Pos.CENTER);
@@ -122,13 +141,13 @@ public class HomeController {
             createdByEventBox.setPadding(new Insets(0, 0, 5, 0));
             HBox buttonGoing = new HBox();
 
-            if (eventServiceDB.isGoing(user.getId(), event.getId())) {
+            if (eventDBRepository.isGoing(user.getId(), niceEvent.getId())) {
                 goingEvent = new Button("Not interested");
-                goingEvent.setOnAction(actionEvent -> handleGoingYes(actionEvent.getSource(), event.getId(), (Object) dateBox, (Object) buttonGoing));
+                goingEvent.setOnAction(actionEvent -> handleGoingYes(actionEvent.getSource(), niceEvent.getId(), (Object) dateBox, (Object) buttonGoing));
 
             } else {
                 goingEvent = new Button("Going");
-                goingEvent.setOnAction(actionEvent -> handleGoingNot(actionEvent.getSource(), event.getId(), (Object) dateBox, (Object) buttonGoing));
+                goingEvent.setOnAction(actionEvent -> handleGoingNot(actionEvent.getSource(), niceEvent.getId(), (Object) dateBox, (Object) buttonGoing));
             }
 
             //eventBox.setOnMouseEntered(action -> handler(action.getSource()));
@@ -141,13 +160,13 @@ public class HomeController {
             dateBox.getChildren().clear();
             createdByEventBox.getChildren().clear();
 
-            String nameOfEvent = event.getNameEvent();
+            String nameOfEvent = niceEvent.getNameEvent();
             nameOfEvent = nameOfEvent.substring(0, 1).toUpperCase(Locale.ROOT) + nameOfEvent.substring(1);
             Label nameLabel = new Label(nameOfEvent);
-            Label dateLabel = new Label(event.getDateTime() + " " + event.getHours());
-            Label createdLabel = new Label("Created by " + event.getCreatedBy());
+            Label dateLabel = new Label(niceEvent.getDateTime() + " " + niceEvent.getHours());
+            Label createdLabel = new Label("Created by " + niceEvent.getCreatedBy());
 
-            Tuple<Long, Long> result = getTimeLeft(event.getDateTime(), event.getHours());
+            Tuple<Long, Long> result = getTimeLeft(niceEvent.getDateTime(), niceEvent.getHours());
 
             nameLabel.getStylesheets().add("cssStyle/textTitle.css");
             dateLabel.getStylesheets().add("cssStyle/text.css");
@@ -170,7 +189,7 @@ public class HomeController {
             dateBox.getChildren().addAll(days, dateLabel, hours);
 
             buttonGoing.getChildren().addAll(numberDays, goingEvent, numberHours);
-            if (!eventServiceDB.isGoing(user.getId(), event.getId())) { numberDays.setVisible(false); numberHours.setVisible(false); days.setVisible(false); hours.setVisible(false); }
+            if (!eventDBRepository.isGoing(user.getId(), niceEvent.getId())) { numberDays.setVisible(false); numberHours.setVisible(false); days.setVisible(false); hours.setVisible(false); }
 
             buttonGoing.setAlignment(Pos.CENTER);
 
@@ -186,6 +205,21 @@ public class HomeController {
             eventBox.setSpacing(5);
             vBox.getChildren().add(eventBox);
         }
+        return vBox;
+    }
+
+    public void loadEvents() {
+        pageView.setPageFactory(new Callback<Integer, Node>() {
+            @Override
+            public Node call(Integer param) {
+                return helper();
+            }
+        });
+    }
+
+    @Override
+    public void update(FriendshipChangeEvent friendshipChangeEvent) {
+        loadEvents();
     }
 
     public void handleNotificationsButton() {
@@ -204,19 +238,25 @@ public class HomeController {
         menuButtonsController.moveToInboxController();
     }
 
-
     public void handleSaveEvent() {
         String nameEventText = nameEvent.getText();
         String creator = user.getFirstName();
         String dateEventText = dateEvent.getText();
-        System.out.println(dateEvent.getText().length());
-        String date = dateEventText.split(" ")[0];
-        System.out.println(date);
-        String hours = dateEventText.split(" ")[1];
-        System.out.println(hours);
+        if (!nameEventText.equals("") && !dateEventText.equals("")) {
+            String date = dateEventText.split(" ")[0];
+            String hours = dateEventText.split(" ")[1];
+            NiceEvent newNiceEvent = new NiceEvent(nameEventText, creator, date, hours);
+            eventsService.saveEvent(newNiceEvent);
+            handleArrowEvent();
+        } else {
+            nameEvent.setPromptText("Choose a name");
+            nameEvent.setStyle("-fx-prompt-text-fill: #ffffff;");
+            dateEvent.setPromptText(" and a date!");
+            dateEvent.setStyle("-fx-prompt-text-fill: #ffffff;");
+            nameEvent.clear();
+            dateEvent.clear();
+        }
 
-        Event newEvent = new Event(nameEventText, creator, date, hours);
-        eventServiceDB.save(newEvent);
 //        handleArrowEvent();
         //2022-01-09 09:00
     }
@@ -236,11 +276,12 @@ public class HomeController {
         dateEvent.setVisible(false);
         createEvent.setVisible(false);
         menuEvent.setVisible(true);
-        menuButtonsController.moveToHomeButton();
+        arrowEvent.setVisible(false);
+        //menuButtonsController.moveToHomeButton();
     }
 
     public void handleGoingNot(Object goingEvent, Long idEvent, Object hbox1, Object hbox2) {
-        eventServiceDB.saveUserEvent(user.getId(), idEvent);
+        eventDBRepository.saveUserEvent(user.getId(), idEvent);
         Button button = (Button) goingEvent;
         HBox hBox11 = (HBox) hbox1; HBox hBox22 = (HBox) hbox2;
         //numberDays.setVisible(true); days.setVisible(true); hours.setVisible(true);
@@ -250,7 +291,7 @@ public class HomeController {
     }
 
     public void handleGoingYes(Object goingEvent, Long idEvent, Object hbox1, Object hbox2) {
-        eventServiceDB.deletUserEvent(user.getId(), idEvent);
+        eventDBRepository.deletUserEvent(user.getId(), idEvent);
         Button button = (Button) goingEvent;
         HBox hBox11 = (HBox) hbox1; HBox hBox22 = (HBox) hbox2;
         //numberDays.setVisible(false); numberHours.setVisible(false); days.setVisible(false); hours.setVisible(false);
@@ -279,7 +320,6 @@ public class HomeController {
         today.set(Calendar.YEAR, LocalDateTime.now().getYear());
         long diff = thatDay.getTimeInMillis() - today.getTimeInMillis();
 
-        System.out.println ("Days: " + diff / 1000 / 60 / 60 / 24);
         long days = diff / 1000 / 60 / 60 / 24;
         long h = 24 - hour;
         return new Tuple<>(days, h);

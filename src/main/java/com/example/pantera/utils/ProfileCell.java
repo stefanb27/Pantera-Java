@@ -1,5 +1,6 @@
 package com.example.pantera.utils;
 
+import com.example.pantera.controller.ProfileController;
 import com.example.pantera.domain.Connection;
 import com.example.pantera.domain.Page;
 import com.example.pantera.domain.User;
@@ -25,23 +26,25 @@ public class ProfileCell extends ListCell<User> {
     Button button = new Button("Remove");
     Page loggedUser;
     User user;
+    FriendshipService friendshipService;
 
     Connection connection = new Connection();
     UserDBRepository userDBRepository = new UserDBRepository(connection);
     FriendshipDBRepository friendshipDBRepository = new FriendshipDBRepository(connection);
     UserService userService = new UserService(userDBRepository, friendshipDBRepository, new UserValidator());
-    FriendshipService friendshipService = new FriendshipService(userDBRepository, friendshipDBRepository, new FriendshipValidator());
+    //FriendshipService friendshipService = new FriendshipService(userDBRepository, friendshipDBRepository, new FriendshipValidator());
     MessageDBRepository messageDBRepository = new MessageDBRepository(connection);
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
 
 
-    public ProfileCell(Page loggedUser) {
+    public ProfileCell(Page loggedUser, FriendshipService friendshipService) {
         super();
         this.loggedUser = loggedUser;
         this.button.getStylesheets().add("cssStyle/buttonLOGIN.css");
         hbox.getChildren().addAll(label, pane, button);
         HBox.setHgrow(pane, Priority.ALWAYS);
         button.setOnAction(event -> handleDeleteButton(user));
+        this.friendshipService = friendshipService;
     }
 
     public void handleDeleteButton(User user) {

@@ -53,8 +53,9 @@ public class LogInController {
 
     @FXML
     private void initialize() {
-        usernameText.setText("god@gmail.com");
-        passwordText.setText("123");
+        usernameText.setText("john@gmail.com");
+        System.out.println(controllerService.hashPassword("1"));
+        passwordText.setText("1");
     }
 
     public void onLoginButtonClick() {

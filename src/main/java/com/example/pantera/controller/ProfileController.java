@@ -98,7 +98,6 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
         lastName.setText(user.getLastName());
         friendshipService.addObserver(this);
         this.datePicker.setValue(LocalDate.now());
-
         uploadData();
     }
 
@@ -106,7 +105,7 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
         Iterable<User> all = friendshipService.getAllFriends(user.getId());
         List<User> messageTaskList = StreamSupport.stream(all.spliterator(), false)
                 .collect(Collectors.toList());
-        listView.setCellFactory(param -> new ProfileCell(user));
+        listView.setCellFactory(param -> new ProfileCell(user, friendshipService));
         myFriendsModel.setAll(messageTaskList);
         listView.setItems(myFriendsModel);
     }

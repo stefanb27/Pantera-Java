@@ -58,7 +58,12 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
     private ListView<User> listView;
 
     @FXML
-    private void initialize() {}
+    private void initialize() {
+        Tooltip.install(inboxButton, new Tooltip("Inbox"));
+        Tooltip.install(homeButton, new Tooltip("Home"));
+        Tooltip.install(notificationsButton, new Tooltip("Notifications"));
+        Tooltip.install(profileButton, new Tooltip("Profile"));
+    }
 
     @FXML
     public void setService(Stage dialogStage, Page user) {

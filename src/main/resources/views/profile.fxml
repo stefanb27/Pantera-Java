@@ -20,7 +20,7 @@
                   <Image url="@../images/profilePhoto.png" />
                </image>
             </ImageView>
-            <Button fx:id="friendStatisticsButton" layoutX="160.0" layoutY="417.0" mnemonicParsing="false" onAction="#handleFriendStatisticsButton" stylesheets="@../cssStyle/buttonLOGIN.css" text="Generate..." />
+            <Button fx:id="friendStatisticsButton" layoutX="142.0" layoutY="417.0" mnemonicParsing="false" onAction="#handleFriendStatisticsButton" prefHeight="25.0" prefWidth="96.0" stylesheets="@../cssStyle/buttonLOGIN.css" text="Mess Report" />
             <Text fill="WHITE" layoutX="173.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Friends">
                <font>
                   <Font name="Dubai Bold" size="16.0" />
@@ -37,8 +37,8 @@
                   <Font name="Dubai Regular" size="16.0" />
                </font>
             </Label>
-            <Button fx:id="statisticsButton" layoutX="34.0" layoutY="417.0" mnemonicParsing="false" onAction="#handleStatisticsButton" stylesheets="@../cssStyle/buttonLOGIN.css" text="My statistics" />
-            <DatePicker fx:id="datePicker" layoutX="260.0" layoutY="416.0" prefHeight="26.0" prefWidth="102.0" />
+            <Button fx:id="statisticsButton" layoutX="34.0" layoutY="417.0" mnemonicParsing="false" onAction="#handleStatisticsButton" stylesheets="@../cssStyle/buttonLOGIN.css" text="My Statistics" />
+            <DatePicker fx:id="datePicker" layoutX="258.0" layoutY="417.0" prefHeight="26.0" prefWidth="102.0" stylesheets="@../cssStyle/date-picker.css" />
          </children>
       </AnchorPane>
       <AnchorPane layoutY="452.0" prefHeight="132.0" prefWidth="398.0" style="-fx-background-color: #2F2E46; -fx-background-radius: 25;">

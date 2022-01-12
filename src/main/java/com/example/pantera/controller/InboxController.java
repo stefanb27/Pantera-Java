@@ -73,7 +73,7 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
     @FXML
     private ImageView profileButton;
     @FXML
-    private ImageView notificationButton;
+    private ImageView notificationsButton;
     @FXML
     private Button sendButton;
     @FXML
@@ -86,7 +86,12 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
     private ScrollPane scrollPane;
 
     @FXML
-    private void initialize() {}
+    private void initialize() {
+        Tooltip.install(homeButton, new Tooltip("Inbox"));
+        Tooltip.install(notificationsButton, new Tooltip("Notifications"));
+        Tooltip.install(searchButton, new Tooltip("Search"));
+        Tooltip.install(profileButton, new Tooltip("Profile"));
+    }
 
     @FXML
     public void setService(Stage dialogStage, Page user) {
@@ -138,10 +143,11 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
             label.setPadding(new Insets(2, 5, 2, 5));
             label.setId("send");
             label.getStylesheets().add("cssStyle/textField.css");
+            label.setStyle("-fx-border-color: #8284AD; -fx-text-fill: #ffffff; -fx-background-color: #2F2E46;");
             HBox hBox = new HBox();
 
             HBox hboxReply = new HBox();
-            ImageView imageView = new ImageView("D:\\ubb\\semestrul III\\metode avansate\\pantera\\src\\main\\resources\\images\\reply.png");
+            ImageView imageView = new ImageView("X:\\pantera\\src\\main\\resources\\images\\reply.png");
             imageView.setFitHeight(15);
             imageView.setFitWidth(15);
 
@@ -165,14 +171,31 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
             Message reply = controllerService.findReply(message.getReply());
 
             if (message.getReply() != 0 && reply != null) {
-                replyLabel.setText("Replied to: " + reply.getMessage());
+                Label messageReplied = new Label(reply.getMessage());
+                replyLabel.setText("Replied to: " + userDBRepository.findOne(reply.getFrom()).getFirstName());
+                replyLabel.setStyle("-fx-text-fill: #797484;"); //797484
+                messageReplied.setStyle("-fx-text-fill: #B9B6BE;" + //B9B6BE
+                        "-fx-border-color: #2F2E46; -fx-border-radius: 20; -fx-background-color: #2F2E46;" +
+                        "-fx-background-radius: 20;");
+                messageReplied.setPadding(new Insets(2, 5, 2, 5));
+
+                if(!reply.getFrom().equals(user.getId())) {
+                    replyLabel.setAlignment(Pos.TOP_RIGHT);
+                    messageReplied.setAlignment(Pos.TOP_RIGHT);
+                    vBox.setAlignment(Pos.TOP_RIGHT);
+                }else {
+                    replyLabel.setAlignment(Pos.TOP_LEFT);
+                    messageReplied.setAlignment(Pos.TOP_LEFT);
+                    vBox.setAlignment(Pos.TOP_LEFT);
+                }
                 vBox.getChildren().add(replyLabel);
+                vBox.getChildren().add(messageReplied);
                 vBox.getChildren().add(hBox);
                 chatBox.getChildren().add(vBox);
             } else {
                 chatBox.getChildren().add(hBox);
             }
-            chatBox.setSpacing(10);
+            //chatBox.setSpacing(10);
         }
         chatBox.heightProperty().addListener(observable -> scrollPane.setVvalue(1D));
         messagesModel.setAll(messages);
@@ -266,12 +289,12 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
     }
 
 
-    public void handleDragN(){ notif.setVisible(true);}
-    public void handleDragP(){ prof.setVisible(true);}
-    public void handleDragS(){ search.setVisible(true);}
-    public void handleDragH(){ home.setVisible(true);}
-    public void handleDragNE(){ notif.setVisible(false);}
-    public void handleDragPE(){ prof.setVisible(false);}
-    public void handleDragSE(){ search.setVisible(false);}
-    public void handleDragHE(){ home.setVisible(false);}
+//    public void handleDragN(){ notif.setVisible(true);}
+//    public void handleDragP(){ prof.setVisible(true);}
+//    public void handleDragS(){ search.setVisible(true);}
+//    public void handleDragH(){ home.setVisible(true);}
+//    public void handleDragNE(){ notif.setVisible(false);}
+//    public void handleDragPE(){ prof.setVisible(false);}
+//    public void handleDragSE(){ search.setVisible(false);}
+//    public void handleDragHE(){ home.setVisible(false);}
 }

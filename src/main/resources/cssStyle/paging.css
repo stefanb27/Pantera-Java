@@ -1,0 +1,24 @@
+.pagination .pagination-control .button, .pagination .toggle-button {
+    -fx-background-color: -fx-paginator-button;
+    -fx-border-color: #ffffff;
+    -fx-text-fill: #ffffff;
+}
+
+.pagination .pagination-control .toggle-button:selected {
+    -fx-background-color: #0DF6E3;
+    -fx-text-fill: #1F1A30;
+}
+
+.pagination .pagination-control .toggle-button:hover, .pagination .pagination-control .button:hover  {
+    -fx-background-color: #0DF6E3;
+    -fx-text-fill: #1F1A30;
+}
+
+.pagination .pagination-control .left-arrow, .right-arrow{
+    -fx-background-color: #ffffff;
+}
+
+.pagination .label {
+    -fx-text-fill: #ffffff;
+
+}
