@@ -96,11 +96,6 @@ public class EventDBRepository implements PagingRepository<Long, NiceEvent> {
     }
 
     @Override
-    public NiceEvent findOne(Long aLong) {
-        return null;
-    }
-
-    @Override
     public Iterable<NiceEvent> findAll() {
         List<NiceEvent> niceEvents = new ArrayList<>();
         String sql = "select * from events";
@@ -121,16 +116,6 @@ public class EventDBRepository implements PagingRepository<Long, NiceEvent> {
             e.printStackTrace();
         }
         return niceEvents;
-    }
-
-    @Override
-    public NiceEvent delete(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public NiceEvent update(NiceEvent entity) {
-        return null;
     }
 
     @Override
@@ -155,5 +140,20 @@ public class EventDBRepository implements PagingRepository<Long, NiceEvent> {
         Iterable<NiceEvent> events1 = niceEvents;
         Paginator<NiceEvent> paginator= new Paginator<>(pageable, events1);
         return paginator.paginate();
+    }
+
+    @Override
+    public NiceEvent findOne(Long aLong) {
+        return null;
+    }
+
+    @Override
+    public NiceEvent delete(Long aLong) {
+        return null;
+    }
+
+    @Override
+    public NiceEvent update(NiceEvent entity) {
+        return null;
     }
 }

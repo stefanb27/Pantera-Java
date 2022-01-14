@@ -59,10 +59,18 @@ public class SearchController implements Observer<FriendshipChangeEvent> {
 
     @FXML
     private void initialize() {
-        Tooltip.install(inboxButton, new Tooltip("Inbox"));
-        Tooltip.install(homeButton, new Tooltip("Home"));
-        Tooltip.install(notificationsButton, new Tooltip("Notifications"));
-        Tooltip.install(profileButton, new Tooltip("Profile"));
+        Tooltip tooltip1 = new Tooltip("Home");
+        tooltip1.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(homeButton, tooltip1);
+        Tooltip tooltip2 = new Tooltip("Notifications");
+        tooltip2.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(notificationsButton, tooltip2);
+        Tooltip tooltip3 = new Tooltip("Inbox");
+        tooltip3.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(inboxButton, tooltip3);
+        Tooltip tooltip4 = new Tooltip("Profile");
+        tooltip4.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(profileButton, tooltip4);
     }
 
     @FXML

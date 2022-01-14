@@ -91,7 +91,7 @@ public class PdfPrinter {
                 List<Message> copy = new ArrayList<>(groupMessages);
                 List<String> groupNames = copy.stream().map(x -> groupDBRepository.findOne(x.getGroup()).getName())
                         .collect(Collectors.toList());
-                int n = 1;
+                int n = 0;
                 contentStream.showText(groupNames.get(0));
                 contentStream.newLine();
                 for (Message message : groupMessages) {

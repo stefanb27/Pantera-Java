@@ -99,10 +99,18 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
 
     @FXML
     private void initialize() {
-        Tooltip.install(inboxButton, new Tooltip("Inbox"));
-        Tooltip.install(notificationsButton, new Tooltip("Notifications"));
-        Tooltip.install(searchButton, new Tooltip("Search"));
-        Tooltip.install(profileButton, new Tooltip("Profile"));
+        Tooltip tooltip1 = new Tooltip("Inbox");
+        tooltip1.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(inboxButton, tooltip1);
+        Tooltip tooltip2 = new Tooltip("Notifications");
+        tooltip2.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(notificationsButton, tooltip2);
+        Tooltip tooltip3 = new Tooltip("Search");
+        tooltip3.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(searchButton, tooltip3);
+        Tooltip tooltip4 = new Tooltip("Profile");
+        tooltip4.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(profileButton, tooltip4);
         eventsService.setPageSize(2);
         eventsService.addObserver(this);
 //        eventsService.getAll().forEach(System.out::println);
@@ -124,7 +132,7 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
 
     public VBox helper() {
         VBox vBox = new VBox();
-        List<NiceEvent> pageList = (List<NiceEvent>) eventsService.getAll();
+        List<NiceEvent> pageList = (List<NiceEvent>) user.getEvents();
         System.out.println(Math.ceil(pageList.size() / 2.0));
         pageView.setPageCount((int) Math.ceil(pageList.size() / 2.0));
         for (NiceEvent niceEvent : eventsService.getMessagesOnPage(pageView.getCurrentPageIndex())) {
@@ -140,6 +148,9 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
             createdByEventBox.setAlignment(Pos.CENTER);
             createdByEventBox.setPadding(new Insets(0, 0, 5, 0));
             HBox buttonGoing = new HBox();
+            ImageView on = new ImageView("X:\\pantera\\src\\main\\resources\\images\\on.png"); on.setFitWidth(20); on.setFitHeight(20);
+            ImageView onFake = new ImageView("X:\\pantera\\src\\main\\resources\\images\\on.png"); onFake.setFitWidth(20); onFake.setFitHeight(20);
+            //on.setOnMouseClicked(event -> {});
 
             if (eventDBRepository.isGoing(user.getId(), niceEvent.getId())) {
                 goingEvent = new Button("Not interested");
@@ -177,7 +188,8 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
 
             dateBox.setSpacing(25);
             dateBox.setAlignment(Pos.CENTER);
-            buttonGoing.setSpacing(52);
+            //goingEvent.setAlignment(Pos.CENTER);
+            buttonGoing.setSpacing(16);
             numberDays = new TextField(String.valueOf(result.getLeft())); numberDays.setMaxWidth(40); numberDays.setEditable(false);
             numberHours = new TextField(String.valueOf(result.getRight())); numberHours.setMaxWidth(40); numberHours.setEditable(false);
             numberDays.setStyle("-fx-background-color: transparent; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 14;");
@@ -188,8 +200,9 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
             hours.setStyle("-fx-background-color: transparent; -fx-text-fill: #0DF6E3; -fx-font-weight: bold; -fx-font-size: 18;");
             dateBox.getChildren().addAll(days, dateLabel, hours);
 
-            buttonGoing.getChildren().addAll(numberDays, goingEvent, numberHours);
-            if (!eventDBRepository.isGoing(user.getId(), niceEvent.getId())) { numberDays.setVisible(false); numberHours.setVisible(false); days.setVisible(false); hours.setVisible(false); }
+            buttonGoing.getChildren().addAll(numberDays, onFake, goingEvent, on, numberHours);
+
+            if (!eventDBRepository.isGoing(user.getId(), niceEvent.getId())) { numberDays.setVisible(false); numberHours.setVisible(false); days.setVisible(false); hours.setVisible(false); on.setVisible(false); onFake.setVisible(false);}
 
             buttonGoing.setAlignment(Pos.CENTER);
 
@@ -329,13 +342,21 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
         hBox1.getChildren().get(0).setVisible(false);
         hBox1.getChildren().get(2).setVisible(false);
         hBox2.getChildren().get(0).setVisible(false);
-        hBox2.getChildren().get(2).setVisible(false);
+        hBox2.getChildren().get(1).setVisible(false);
+        hBox2.getChildren().get(2).setVisible(true);
+        hBox2.getChildren().get(3).setVisible(false);
+        hBox2.getChildren().get(4).setVisible(false);
     }
 
     public void handlerShow(HBox hBox1, HBox hBox2){
         hBox1.getChildren().get(0).setVisible(true);
         hBox1.getChildren().get(2).setVisible(true);
         hBox2.getChildren().get(0).setVisible(true);
+        hBox2.getChildren().get(1).setVisible(true);
         hBox2.getChildren().get(2).setVisible(true);
+        hBox2.getChildren().get(3).setVisible(true);
+        hBox2.getChildren().get(4).setVisible(true);
     }
+
+    //2022-01-20 08:00
 }

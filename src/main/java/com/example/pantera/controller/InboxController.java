@@ -87,10 +87,18 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
 
     @FXML
     private void initialize() {
-        Tooltip.install(homeButton, new Tooltip("Inbox"));
-        Tooltip.install(notificationsButton, new Tooltip("Notifications"));
-        Tooltip.install(searchButton, new Tooltip("Search"));
-        Tooltip.install(profileButton, new Tooltip("Profile"));
+        Tooltip tooltip1 = new Tooltip("Home");
+        tooltip1.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(homeButton, tooltip1);
+        Tooltip tooltip2 = new Tooltip("Notifications");
+        tooltip2.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(notificationsButton, tooltip2);
+        Tooltip tooltip3 = new Tooltip("Search");
+        tooltip3.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(searchButton, tooltip3);
+        Tooltip tooltip4 = new Tooltip("Profile");
+        tooltip4.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(profileButton, tooltip4);
     }
 
     @FXML
@@ -124,20 +132,21 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
 
     private void uploadData(Entity entity) {
         chatBox.getChildren().clear();
-        List<Message> messages = new ArrayList<>();
+        List<Message> messages;
         try {
             User newUser = (User) entity;
             messages = controllerService.getConversation(user.getId(), newUser.getId());
+            //messages = user.getMessages(newUser.getId());
         } catch (ClassCastException classCastException) {
             Group group = (Group) entity;
             messages = controllerService.getGroupConversation(user.getId(), group.getId());
+            //messages = user.getMessages(group.getId());
         }
 
         for (Message message : messages) {
             String messageUpper = message.getMessage();
             if(messageUpper.length() != 0) {
                 messageUpper = messageUpper.substring(0, 1).toUpperCase(Locale.ROOT) + messageUpper.substring(1);
-                int lenInit = 0;
             }
             Label label = new Label(messageUpper);
             label.setPadding(new Insets(2, 5, 2, 5));
@@ -247,11 +256,10 @@ public class InboxController implements Observer<FriendshipChangeEvent> {
             }
             sendTextField.clear();
         }
-        user.addMessage(new Message(user.getId(), sendTextField.getText(), LocalDateTime.now()));
+        //user.addMessage(new Message(user.getId(), sendTextField.getText(), LocalDateTime.now()));
     }
 
     public boolean isAGroup(){
-
         return true;
     }
 

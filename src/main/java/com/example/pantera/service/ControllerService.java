@@ -52,6 +52,26 @@ public class ControllerService {
         return null;
     }
 
+    public String hashPassword(String password) {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] encodedhash = digest.digest(
+                password.getBytes(StandardCharsets.UTF_8));
+        StringBuilder hexString = new StringBuilder(2 * encodedhash.length);
+        for (int i = 0; i < encodedhash.length; i++) {
+            String hex = Integer.toHexString(0xff & encodedhash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
     public List<NotificationsWrapper> notificationsFilter(User user) {
         List<NotificationsWrapper> users = new ArrayList<>();
         String sql = "select friendships.id1, users.first_name, users.last_name, friendships.status, friendships.date " +
@@ -191,9 +211,6 @@ public class ControllerService {
             ResultSet resultSet = ps.executeQuery();
             int nr = 0;
             while (resultSet.next()) {
-                if (nr == 0) {
-                    // TODO: 03.01.2022
-                }
                 Long id = resultSet.getLong(1);
                 Long idm = resultSet.getLong(2);
                 Long touser = resultSet.getLong(3);
@@ -386,21 +403,31 @@ public class ControllerService {
         }
         return messagesReceived;
     }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<Message> findAllMessForAnUser(User user){
         List<Message> messages = new ArrayList<>();
-        String sql = "select c.fromuser, c.message, c.date, m.touser from conversations c inner join messages m on c.id = m.idm where touser = ? or fromuser = ?";
+        String sql = "select * from conversations c inner join messages m on c.id = m.idm where touser = ? or fromuser = ?";
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setLong(1, user.getId());
             ps.setLong(2, user.getId());
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                Long fromUser = resultSet.getLong("fromuser");
+                Long id = resultSet.getLong("id");
+                Long idm = resultSet.getLong("idm");
+                Long touser = resultSet.getLong("touser");
+                Long fromuser = resultSet.getLong("fromuser");
                 String message = resultSet.getString("message");
                 LocalDateTime date = resultSet.getTimestamp("date").toLocalDateTime();
-                Message mess = new Message(fromUser, message, date);
-                messages.add(mess);
+                Long reply = resultSet.getLong("reply");
+                Message message1 = new Message(fromuser, message, date);
+                List<Long> to = new ArrayList<>();
+                to.add(touser);
+                message1.setTo(to);
+                message1.setId(new Tuple<>(id, idm));
+                message1.setReply(reply);
+                messages.add(message1);
             }
             return messages;
         } catch (SQLException e) {
@@ -461,26 +488,6 @@ public class ControllerService {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public String hashPassword(String password) {
-        MessageDigest digest = null;
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        byte[] encodedhash = digest.digest(
-                password.getBytes(StandardCharsets.UTF_8));
-        StringBuilder hexString = new StringBuilder(2 * encodedhash.length);
-        for (int i = 0; i < encodedhash.length; i++) {
-            String hex = Integer.toHexString(0xff & encodedhash[i]);
-            if(hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
     }
 
     public List<User> getMyFriendsInGivenDate(User user, LocalDate date) {

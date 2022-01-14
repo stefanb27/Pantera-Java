@@ -2,7 +2,7 @@ package com.example.pantera.domain;
 
 import java.time.LocalDateTime;
 
-public class NotificationsWrapper {
+public class NotificationsWrapper extends Entity<Long>{
     private Long id;
     private String firstName;
     private String lastName;

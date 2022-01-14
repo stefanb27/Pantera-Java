@@ -2,6 +2,7 @@ package com.example.pantera.controller;
 
 import com.example.pantera.domain.*;
 import com.example.pantera.events.FriendshipChangeEvent;
+import com.example.pantera.repository.db.EventDBRepository;
 import com.example.pantera.service.ControllerService;
 import com.example.pantera.utils.NotificationsCell;
 import javafx.collections.FXCollections;
@@ -34,10 +35,11 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
     ControllerService controllerService = new ControllerService(userDBRepository, friendshipDBRepository, messageDBRepository, connection);
     MenuButtonsController menuButtonsController;
+    EventDBRepository eventDBRepository = new EventDBRepository(connection);
 
     private Stage dialogStage;
     private Page user;
-    private final ObservableList<NotificationsWrapper> friendshipsModel = FXCollections.observableArrayList();
+    private final ObservableList<Entity> friendshipsModel = FXCollections.observableArrayList();
 
 
     @FXML
@@ -47,17 +49,25 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     @FXML
     private ImageView profileButton;
     @FXML
-    private ListView<NotificationsWrapper> listView;
+    private ListView<Entity> listView;
 
     @FXML
     private ImageView inboxButton;
 
     @FXML
     private void initialize() {
-        Tooltip.install(inboxButton, new Tooltip("Inbox"));
-        Tooltip.install(homeButton, new Tooltip("Home"));
-        Tooltip.install(searchButton, new Tooltip("Search"));
-        Tooltip.install(profileButton, new Tooltip("Profile"));
+        Tooltip tooltip1 = new Tooltip("Home");
+        tooltip1.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(homeButton, tooltip1);
+        Tooltip tooltip2 = new Tooltip("Notifications");
+        tooltip2.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(inboxButton, tooltip2);
+        Tooltip tooltip3 = new Tooltip("Search");
+        tooltip3.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(searchButton, tooltip3);
+        Tooltip tooltip4 = new Tooltip("Profile");
+        tooltip4.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14;");
+        Tooltip.install(profileButton, tooltip4);
     }
 
     @FXML
@@ -68,11 +78,20 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
         friendshipService.addObserver(this);
         uploadData();
     }
+
     private void uploadData() {
         List<NotificationsWrapper> result = user.getRequestsReceived();
                 //controllerService.notificationsFilter(user);
+
+        for(NiceEvent event : eventDBRepository.getAllEvents()){
+            if(eventDBRepository.isGoing(user.getId(), event.getId())){
+                //NotificationsWrapper notificationsWrapper = new NotificationsWrapper()
+                //NotificationsWrapper notificationsWrapper = new NotificationsWrapper();
+                //result.add(notificationsWrapper);
+            }
+        }
         friendshipsModel.setAll(result);
-        listView.setCellFactory(param -> new NotificationsCell(user));
+        //listView.setCellFactory(param -> new NotificationsCell(user));
         listView.setItems(friendshipsModel);
     }
 

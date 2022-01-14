@@ -1,6 +1,7 @@
 package com.example.pantera.controller;
 
 import com.example.pantera.domain.*;
+import com.example.pantera.repository.db.EventDBRepository;
 import com.example.pantera.service.ControllerService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,6 +35,7 @@ public class LogInController {
     MessageDBRepository messageDBRepository = new MessageDBRepository(connection);
     MessageService messageService = new MessageService(userDBRepository, friendshipDBRepository, messageDBRepository);
     ControllerService controllerService = new ControllerService(userDBRepository, friendshipDBRepository, messageDBRepository, connection);
+    EventDBRepository eventDBRepository = new EventDBRepository(connection);
     Stage logInStage;
 
     @FXML
@@ -77,7 +79,8 @@ public class LogInController {
         user.setFriends(controllerService.findFriends(user)); //pt profile
         user.setRequestsReceived(controllerService.notificationsFilter(user));
         user.setRequestsSent(controllerService.findRequestSent(user));
-        user.setMessages(controllerService.findAllMessForAnUser(user));
+        user.setEvents(eventDBRepository.getAllEvents());
+        //user.setMessages(controllerService.findAllMessForAnUser(user));
     }
 
     public void runUser(Page user){

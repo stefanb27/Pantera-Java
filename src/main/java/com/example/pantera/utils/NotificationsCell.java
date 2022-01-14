@@ -1,9 +1,6 @@
 package com.example.pantera.utils;
 
-import com.example.pantera.domain.Connection;
-import com.example.pantera.domain.NotificationsWrapper;
-import com.example.pantera.domain.Page;
-import com.example.pantera.domain.User;
+import com.example.pantera.domain.*;
 import com.example.pantera.domain.validators.FriendshipValidator;
 import com.example.pantera.domain.validators.UserValidator;
 import com.example.pantera.repository.db.FriendshipDBRepository;
@@ -68,15 +65,15 @@ public class NotificationsCell extends ListCell<NotificationsWrapper> {
     }
 
     public void handleAddButton(NotificationsWrapper user) {
-        friendshipService.approveFriendship(loggedUser.getId(), user.getId());
+        friendshipService.approveFriendship(loggedUser.getId(), (Long) user.getId());
         addButton.setText("Friend");
         addButton.setDisable(true);
         deleteButton.setDisable(true);
-        loggedUser.addFriend(userDBRepository.findOne(user.getId())); //paging
+        loggedUser.addFriend(userDBRepository.findOne((Long) user.getId())); //paging
     }
 
     public void handleDeleteButton(NotificationsWrapper user) {
-        friendshipService.deleteFriendship(loggedUser.getId(), user.getId());
+        friendshipService.deleteFriendship(loggedUser.getId(), (Long) user.getId());
         deleteButton.setText("Enemy");
         addButton.setDisable(true);
         deleteButton.setDisable(true);
