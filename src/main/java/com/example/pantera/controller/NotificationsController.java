@@ -23,6 +23,9 @@ import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
 import com.example.pantera.utils.Observer;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationsController implements Observer<FriendshipChangeEvent> {
@@ -39,7 +42,7 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
 
     private Stage dialogStage;
     private Page user;
-    private final ObservableList<Entity> friendshipsModel = FXCollections.observableArrayList();
+    private final ObservableList<NotificationsWrapper> friendshipsModel = FXCollections.observableArrayList();
 
 
     @FXML
@@ -49,7 +52,7 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     @FXML
     private ImageView profileButton;
     @FXML
-    private ListView<Entity> listView;
+    private ListView<NotificationsWrapper> listView;
 
     @FXML
     private ImageView inboxButton;
@@ -80,18 +83,21 @@ public class NotificationsController implements Observer<FriendshipChangeEvent> 
     }
 
     private void uploadData() {
-        List<NotificationsWrapper> result = user.getRequestsReceived();
-                //controllerService.notificationsFilter(user);
+        List<NotificationsWrapper> result = new ArrayList<>();
+        //controllerService.notificationsFilter(user);
 
         for(NiceEvent event : eventDBRepository.getAllEvents()){
             if(eventDBRepository.isGoing(user.getId(), event.getId())){
-                //NotificationsWrapper notificationsWrapper = new NotificationsWrapper()
-                //NotificationsWrapper notificationsWrapper = new NotificationsWrapper();
-                //result.add(notificationsWrapper);
+                result.add(new NotificationsWrapper(event.getId() + 1000, event.getNameEvent(), "a", "a",
+                        LocalDateTime.parse(event.getDateTime() + "T" + event.getHours())));
             }
         }
+
+        result.addAll(user.getRequestsReceived());
+
         friendshipsModel.setAll(result);
-        //listView.setCellFactory(param -> new NotificationsCell(user));
+        //NotificationsWrapper notificationsWrapper = new NotificationsWrapper(user.getId(), user.getFirstName(), user.getLastName(), "approved", LocalDateTime.now())
+        listView.setCellFactory(param -> new NotificationsCell(user, friendshipService));
         listView.setItems(friendshipsModel);
     }
 

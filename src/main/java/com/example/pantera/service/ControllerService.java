@@ -490,16 +490,17 @@ public class ControllerService {
         return null;
     }
 
-    public List<User> getMyFriendsInGivenDate(User user, LocalDate date) {
+    public List<User> getMyFriendsInGivenDate(User user, LocalDate startDate, LocalDate endDate) {
         List<User> users = new ArrayList<>();
         String sql = "select * from friendships where (id1 = ? or id2 = ?) " +
-                "and date = ? and status = ?";
+                "and status = ? and date between ? and ?";
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setLong(1, user.getId());
             ps.setLong(2, user.getId());
-            ps.setDate(3, Date.valueOf(date));
-            ps.setString(4, "approved");
+            ps.setString(3, "approved");
+            ps.setDate(4, Date.valueOf(startDate));
+            ps.setDate(5, Date.valueOf(endDate));
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 Long id1 = resultSet.getLong(1);
@@ -514,17 +515,18 @@ public class ControllerService {
         return users;
     }
 
-    public List<Message> getConversationsDate(Long user1, LocalDate pickedDate) {
+    public List<Message> getConversationsDate(Long user1, LocalDate startDate, LocalDate endDate) {
         List<Message> messages = new ArrayList<>();
         String sql = "select messages.id, messages.idm, messages.touser, conversations.fromuser, " +
                 "conversations.message, conversations.date, messages.reply from messages " +
                 "inner join conversations on messages.idm = conversations.id " +
                 "where messages.touser = ? " +
-                "and messages.groupcolumn = 0 and conversations.date = ?";
+                "and messages.groupcolumn = 0 and conversations.date between ? and ?";
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setLong(1, user1);
-            ps.setDate(2, Date.valueOf(pickedDate));
+            ps.setDate(2, Date.valueOf(startDate));
+            ps.setDate(3, Date.valueOf(endDate));
             ResultSet resultSet = ps.executeQuery();
             int nr = 0;
             while (resultSet.next()) {
@@ -550,13 +552,13 @@ public class ControllerService {
         return messages;
     }
 
-    public List<Message> getGroupConversationsDate(Long user1, LocalDate pickedDate) {
+    public List<Message> getGroupConversationsDate(Long user1, LocalDate startDate, LocalDate endDate) {
         List<Message> messages = new ArrayList<>();
         String sql = "select messages.id, messages.idm, messages.touser, messages.groupcolumn, conversations.fromuser, " +
                 "conversations.message, conversations.date, messages.reply from messages " +
                 "inner join conversations on messages.idm = conversations.id " +
                 "where (messages.touser = ? or conversations.fromuser = ?) and " +
-                "messages.groupcolumn != 0 and conversations.date = ? " +
+                "messages.groupcolumn != 0 and conversations.date between ? and ? " +
                 "order by messages.groupcolumn, conversations.date";
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -564,7 +566,8 @@ public class ControllerService {
 //            ps.setLong(2, user1);
             ps.setLong(1, user1);
             ps.setLong(2, user1);
-            ps.setDate(3, Date.valueOf(pickedDate));
+            ps.setDate(3, Date.valueOf(startDate));
+            ps.setDate(4, Date.valueOf(endDate));
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 Long id = resultSet.getLong(1);
@@ -591,21 +594,22 @@ public class ControllerService {
         return messages;
     }
 
-    public List<Message> getConversationsFriendDate(Long user1, Long user2, LocalDate pickedDate) {
+    public List<Message> getConversationsFriendDate(Long user1, Long user2, LocalDate startDate, LocalDate endDate) {
         List<Message> messages = new ArrayList<>();
         String sql = "select messages.id, messages.idm, messages.touser, conversations.fromuser, " +
                 "conversations.message, conversations.date, messages.reply from messages " +
                 "inner join conversations on messages.idm = conversations.id " +
                 "where ((messages.touser = ? and conversations.fromuser = ?) " +
                 "or (messages.touser = ? and conversations.fromuser = ?)) " +
-                "and messages.groupcolumn = 0 and conversations.date = ?";
+                "and messages.groupcolumn = 0 and conversations.date between ? and ?";
         try (java.sql.Connection  con = connection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setLong(1, user1);
             ps.setLong(2, user2);
             ps.setLong(3, user2);
             ps.setLong(4, user1);
-            ps.setDate(5, Date.valueOf(pickedDate));
+            ps.setDate(5, Date.valueOf(startDate));
+            ps.setDate(6, Date.valueOf(endDate));
             ResultSet resultSet = ps.executeQuery();
             int nr = 0;
             while (resultSet.next()) {
@@ -630,35 +634,4 @@ public class ControllerService {
         }
         return messages;
     }
-
-//    public List<Long> findRequestReceived(){
-//
-//    }
-//
-
-//    public List<User> myFriendsFilter(User user, String searchText) {
-//        List<User> users = new ArrayList<>();
-//        String sql = "select * from users where id != ? and first_name like ? or last_name like ?";
-//        try (java.sql.Connection  con = connection.getConnection();
-//             PreparedStatement ps = con.prepareStatement(sql)) {
-//            ps.setLong(1, user.getId());
-//            ps.setString(2, '%' + searchText + '%');
-//            ps.setString(3, '%' + searchText + '%');
-//            ResultSet resultSet = ps.executeQuery();
-//            while (resultSet.next()) {
-//                Long id = resultSet.getLong(1);
-//                String firstName = resultSet.getString(2);
-//                String lastName = resultSet.getString(3);
-//                String email = resultSet.getString(4);
-//                String password = resultSet.getString(5);
-//                User anUser = new User(firstName, lastName, email, password);
-//                anUser.setId(id);
-//                users.add(anUser);
-//            }
-//            ps.execute();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return users;
-//    }
 }

@@ -25,9 +25,8 @@ import com.example.pantera.repository.db.UserDBRepository;
 import com.example.pantera.service.FriendshipService;
 import com.example.pantera.service.UserService;
 import javafx.util.Callback;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
@@ -63,7 +62,10 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
     private TextField nameEvent;
 
     @FXML
-    private TextField dateEvent;
+    private TextField hourEvent;
+
+    @FXML
+    private DatePicker datePicker;
 
     @FXML
     private Button createEvent;
@@ -254,20 +256,23 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
     public void handleSaveEvent() {
         String nameEventText = nameEvent.getText();
         String creator = user.getFirstName();
-        String dateEventText = dateEvent.getText();
-        if (!nameEventText.equals("") && !dateEventText.equals("")) {
-            String date = dateEventText.split(" ")[0];
-            String hours = dateEventText.split(" ")[1];
-            NiceEvent newNiceEvent = new NiceEvent(nameEventText, creator, date, hours);
+        String hourEventText = hourEvent.getText();
+        LocalDate datePickerValue = datePicker.getValue();
+        if (!nameEventText.equals("") && !hourEventText.equals("")) {
+            String date = datePickerValue.toString();
+            NiceEvent newNiceEvent = new NiceEvent(nameEventText, creator, date, hourEventText);
             eventsService.saveEvent(newNiceEvent);
+            user.setEvents(eventDBRepository.getAllEvents());
+            loadEvents();
             handleArrowEvent();
+            nameEvent.clear(); hourEvent.clear(); datePicker.getEditor().clear();
         } else {
             nameEvent.setPromptText("Choose a name");
             nameEvent.setStyle("-fx-prompt-text-fill: #ffffff;");
-            dateEvent.setPromptText(" and a date!");
-            dateEvent.setStyle("-fx-prompt-text-fill: #ffffff;");
+            hourEvent.setPromptText(" and a date!");
+            hourEvent.setStyle("-fx-prompt-text-fill: #ffffff;");
             nameEvent.clear();
-            dateEvent.clear();
+            hourEvent.clear();
         }
 
 //        handleArrowEvent();
@@ -278,7 +283,8 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
         logo.setVisible(false);
         menuEvent.setVisible(false);
         nameEvent.setVisible(true);
-        dateEvent.setVisible(true);
+        datePicker.setVisible(true);
+        hourEvent.setVisible(true);
         createEvent.setVisible(true);
         arrowEvent.setVisible(true);
     }
@@ -286,7 +292,8 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
     public void handleArrowEvent() {
         logo.setVisible(true);
         nameEvent.setVisible(false);
-        dateEvent.setVisible(false);
+        datePicker.setVisible(false);
+        hourEvent.setVisible(false);
         createEvent.setVisible(false);
         menuEvent.setVisible(true);
         arrowEvent.setVisible(false);
@@ -334,7 +341,12 @@ public class HomeController implements Observer<FriendshipChangeEvent> {
         long diff = thatDay.getTimeInMillis() - today.getTimeInMillis();
 
         long days = diff / 1000 / 60 / 60 / 24;
-        long h = 24 - hour;
+        long h;
+        if(LocalDateTime.now().getHour() < hour){
+            h = hour - LocalDateTime.now().getHour();
+        }else{
+            h = hour + 24 - LocalDateTime.now().getHour();
+        }
         return new Tuple<>(days, h);
     }
 

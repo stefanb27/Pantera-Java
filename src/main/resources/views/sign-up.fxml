@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="527.0" prefWidth="398.0" style="-fx-background-color: #1F1A30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pantera.controller.SignUpController">
+   <children>
+      <Text fill="WHITE" fontSmoothingType="LCD" layoutX="43.0" layoutY="73.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Your Account" wrappingWidth="270.86377716064453">
+         <font>
+            <Font name="Dubai Regular" size="24.0" />
+         </font>
+      </Text>
+      <Text fill="#797484" layoutX="43.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please fill the input below here" wrappingWidth="164.80333709716797" />
+      <Pane fx:id="userNameText" layoutX="34.0" layoutY="253.0" prefHeight="51.0" prefWidth="330.0" style="-fx-background-color: #39304D; -fx-background-radius: 50;">
+         <children>
+            <TextField fx:id="emailText" blendMode="LIGHTEN" focusTraversable="false" layoutX="14.0" layoutY="8.0" prefHeight="28.0" prefWidth="303.0" promptText="Email" style="-fx-text-fill: #ffffff; -fx-border-color: #f2f2f2; -fx-background-radius: 40; -fx-background-color: 39304D; -fx-border-color: 39304D; -fx-font: 14px Dubai;">
+               <font>
+                  <Font name="Dubai Regular" size="9.0" />
+               </font>
+            </TextField>
+         </children>
+      </Pane>
+      <Button fx:id="signUpButton" layoutX="110.0" layoutY="430.0" mnemonicParsing="false" onAction="#handleOnSignUpButton" prefHeight="41.0" prefWidth="178.0" style="" stylesheets="@../cssStyle/buttonLOGIN.css" text="SIGN UP" textFill="#1f1a30">
+         <font>
+            <Font name="Dubai Bold" size="12.0" />
+         </font>
+      </Button>
+      <Text fill="#797484" layoutX="110.0" layoutY="509.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Already have an account?" wrappingWidth="150.13671112060547" />
+      <Button fx:id="logInButton" layoutX="246.0" layoutY="489.0" mnemonicParsing="false" onAction="#onSignInButton" prefHeight="30.0" prefWidth="59.0" style="-fx-background-color: #1F1A30;" stylesheets="@../cssStyle/buttonsText.css" text="Log in" textFill="#0df6e3">
+         <font>
+            <Font name="Dubai Regular" size="12.0" />
+         </font>
+      </Button>
+      <Pane layoutX="34.0" layoutY="369.0" prefHeight="51.0" prefWidth="330.0" style="-fx-background-color: #39304D; -fx-background-radius: 50;">
+         <children>
+            <PasswordField fx:id="confirmText" focusTraversable="false" layoutX="14.0" layoutY="8.0" prefHeight="28.0" prefWidth="303.0" promptText="Confirm password" style="-fx-background-color: #39304D; -fx-background-radius: 40; -fx-border-radius: 40; -fx-border-color: #39304D; -fx-border-width: 0.1; -fx-text-fill: #ffffff; -fx-font: 14px Dubai;">
+               <font>
+                  <Font name="Dubai Regular" size="9.0" />
+               </font>
+            </PasswordField>
+         </children>
+      </Pane>
+      <Pane layoutX="34.0" layoutY="311.0" prefHeight="51.0" prefWidth="330.0" style="-fx-background-color: #39304D; -fx-background-radius: 50;">
+         <children>
+            <PasswordField fx:id="passwordText" focusTraversable="false" layoutX="14.0" layoutY="8.0" prefHeight="28.0" prefWidth="303.0" promptText="Password" style="-fx-background-color: #39304D; -fx-background-radius: 40; -fx-border-radius: 40; -fx-border-color: #39304D; -fx-border-width: 0.1; -fx-text-fill: #ffffff; -fx-font: 14px Dubai;">
+               <font>
+                  <Font name="Dubai Regular" size="9.0" />
+               </font>
+            </PasswordField>
+         </children>
+      </Pane>
+      <Pane layoutX="34.0" layoutY="135.0" prefHeight="51.0" prefWidth="330.0" style="-fx-background-color: #39304D; -fx-background-radius: 50;">
+         <children>
+            <TextField fx:id="firstNameText" blendMode="LIGHTEN" focusTraversable="false" layoutX="14.0" layoutY="8.0" prefHeight="28.0" prefWidth="303.0" promptText="First name" style="-fx-text-fill: #ffffff; -fx-border-color: #f2f2f2; -fx-background-radius: 40; -fx-background-color: 39304D; -fx-border-color: 39304D; -fx-font: 14px Dubai;">
+               <font>
+                  <Font name="Dubai Regular" size="9.0" />
+               </font>
+            </TextField>
+         </children>
+      </Pane>
+      <Pane layoutX="34.0" layoutY="194.0" prefHeight="51.0" prefWidth="330.0" style="-fx-background-color: #39304D; -fx-background-radius: 50;">
+         <children>
+            <TextField fx:id="lastNameText" blendMode="LIGHTEN" focusTraversable="false" layoutX="14.0" layoutY="8.0" prefHeight="28.0" prefWidth="303.0" promptText="Last name" style="-fx-text-fill: #ffffff; -fx-border-color: #f2f2f2; -fx-background-radius: 40; -fx-background-color: 39304D; -fx-border-color: 39304D; -fx-font: 14px Dubai;">
+               <font>
+                  <Font name="Dubai Regular" size="9.0" />
+               </font>
+            </TextField>
+         </children>
+      </Pane>
+      <Label fx:id="infoLabel" layoutX="29.0" layoutY="108.0" />
+   </children>
+</AnchorPane>

@@ -14,12 +14,15 @@ import com.example.pantera.service.ControllerService;
 import com.example.pantera.service.FriendshipService;
 import com.example.pantera.service.MessageService;
 import com.example.pantera.service.UserService;
+import javafx.stage.FileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -40,10 +43,16 @@ public class PdfPrinter {
     ControllerService controllerService = new ControllerService(userDBRepository, friendshipDBRepository, messageDBRepository, connection);
     GroupDBRepository groupDBRepository = new GroupDBRepository(connection);
 
-    public void printStatisticsForLoggedUser(User user, List<User> users, List<Message> privateMessages, List<Message> groupMessages, LocalDate pickedDate) {
+    public void printStatisticsForLoggedUser(User user, List<User> users, List<Message> privateMessages,
+                                             List<Message> groupMessages, LocalDate startDate, LocalDate endDate) {
         PDDocument document = new PDDocument();
         String filename = "src/main/statistics/" + user.getFirstName() + "_" + user.getLastName() + "_statistics.pdf";
         try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF file","*.pdf"));
+            fileChooser.setTitle("Save to PDF");
+            fileChooser.setInitialFileName("untitled.pdf");
+            File file = fileChooser.showSaveDialog(null);
             PDPage page = new PDPage();
             document.addPage(page);
             PDDocumentInformation pdd = document.getDocumentInformation();
@@ -58,8 +67,8 @@ public class PdfPrinter {
             contentStream.beginText();
             contentStream.newLineAtOffset(10, 700);
             contentStream.showText("Here are some statistics about your new friendships and the messages" +
-                    " you received in: "
-                    + pickedDate.toString());
+                    " you received between "
+                    + startDate.toString() + " and " + endDate.toString());
             contentStream.newLine();
             contentStream.newLine();
             contentStream.newLine();
@@ -79,7 +88,7 @@ public class PdfPrinter {
                 contentStream.newLine();
                 for (Message message : privateMessages) {
                     contentStream.showText("(from: " + userDBRepository.findOne(message.getFrom()) + ") " +
-                                    message.getMessage());
+                            message.getMessage());
                     contentStream.newLine();
                 }
             }
@@ -102,13 +111,13 @@ public class PdfPrinter {
                         contentStream.newLine();
                     }
                     contentStream.showText("(from: " + userDBRepository.findOne(message.getFrom()) + ")" +
-                                    message.getMessage());
+                            message.getMessage());
                     contentStream.newLine();
                 }
             }
             contentStream.endText();
             contentStream.close();
-            document.save(filename);
+            document.save(file.getAbsoluteFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -119,11 +128,15 @@ public class PdfPrinter {
         }
     }
 
-    public void printStatisticsForFriendsMessages(User user, User user1, List<Message> messages, LocalDate pickedDate) {
+    public void printStatisticsForFriendsMessages(User user, User user1, List<Message> messages,
+                                                  LocalDate startDate, LocalDate endDate) {
         PDDocument document = new PDDocument();
-        String filename = "src/main/statistics/" + user.getFirstName() + "_" + user.getLastName()
-                + "_and_" + user1.getFirstName() + "_" + user1.getLastName() + "_statistics.pdf";
         try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF file","*.pdf"));
+            fileChooser.setTitle("Save to PDF");
+            fileChooser.setInitialFileName("untitled.pdf");
+            File file = fileChooser.showSaveDialog(null);
             PDPage page = new PDPage();
             document.addPage(page);
             PDDocumentInformation pdd = document.getDocumentInformation();
@@ -137,20 +150,20 @@ public class PdfPrinter {
             contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
             contentStream.beginText();
             contentStream.newLineAtOffset(10, 700);
-            if (messages.size() == 0) contentStream.showText("You and " + user1 + " have not chatted on " + pickedDate);
+            if (messages.size() == 0) contentStream.showText("You and " + user1 + " have not chatted.");
             else {
-                contentStream.showText("Here is the conversation between you and " + user1 + "on: "
-                        + pickedDate);
+                contentStream.showText("Here is the conversation between you and " + user1 + "on "
+                        + startDate.toString() + " - " + endDate.toString());
                 contentStream.newLine();
                 for (Message message : messages) {
                     contentStream.showText("(from: " + userDBRepository.findOne(message.getFrom()) + ")"
-                                    + message.getMessage());
+                            + message.getMessage());
                     contentStream.newLine();
                 }
             }
             contentStream.endText();
             contentStream.close();
-            document.save(filename);
+            document.save(file.getAbsoluteFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -159,5 +172,25 @@ public class PdfPrinter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void exportAsPdfMess() {
+
+
+//        if(file!=null){
+//            String str = file.getAbsolutePath();
+//
+//            try {
+//                FileWriter fw = new FileWriter(str);
+//                for(Message m:lst2){
+//                    fw.write(m.toString());
+//                    fw.write("\n");
+//                }
+//                fw.flush();
+//            }
+//            catch (Exception e){
+//                e.printStackTrace();
+//            }
+//        }
     }
 }

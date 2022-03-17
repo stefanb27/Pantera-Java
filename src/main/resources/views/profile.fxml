@@ -20,13 +20,13 @@
                   <Image url="@../images/profilePhoto.png" />
                </image>
             </ImageView>
-            <Button fx:id="friendStatisticsButton" layoutX="142.0" layoutY="417.0" mnemonicParsing="false" onAction="#handleFriendStatisticsButton" prefHeight="25.0" prefWidth="96.0" stylesheets="@../cssStyle/buttonLOGIN.css" text="Mess Report" />
+            <Button fx:id="friendStatisticsButton" layoutX="150.0" layoutY="403.0" mnemonicParsing="false" onAction="#handleFriendStatisticsButton" prefHeight="25.0" prefWidth="96.0" stylesheets="@../cssStyle/buttonLOGIN.css" text="Mess Report" />
             <Text fill="WHITE" layoutX="173.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Friends">
                <font>
                   <Font name="Dubai Bold" size="16.0" />
                </font>
             </Text>
-            <ListView fx:id="listView" layoutX="34.0" layoutY="181.0" prefHeight="229.0" prefWidth="329.0" stylesheets="@../cssStyle/listView.css" />
+            <ListView fx:id="listView" layoutX="34.0" layoutY="181.0" prefHeight="204.0" prefWidth="330.0" stylesheets="@../cssStyle/listView.css" />
             <Label fx:id="firstName" alignment="CENTER_RIGHT" layoutX="115.0" layoutY="84.0" prefHeight="17.0" prefWidth="53.0" textFill="WHITE">
                <font>
                   <Font name="Dubai Regular" size="16.0" />
@@ -37,8 +37,9 @@
                   <Font name="Dubai Regular" size="16.0" />
                </font>
             </Label>
-            <Button fx:id="statisticsButton" layoutX="34.0" layoutY="417.0" mnemonicParsing="false" onAction="#handleStatisticsButton" stylesheets="@../cssStyle/buttonLOGIN.css" text="My Statistics" />
-            <DatePicker fx:id="datePicker" layoutX="258.0" layoutY="417.0" prefHeight="26.0" prefWidth="102.0" stylesheets="@../cssStyle/date-picker.css" />
+            <Button fx:id="statisticsButton" layoutX="34.0" layoutY="403.0" mnemonicParsing="false" onAction="#handleStatisticsButton" prefHeight="26.0" prefWidth="102.0" stylesheets="@../cssStyle/buttonLOGIN.css" text="My Statistics" />
+            <DatePicker fx:id="endDate" layoutX="258.0" layoutY="417.0" prefHeight="26.0" prefWidth="102.0" promptText="End date..." stylesheets="@../cssStyle/date-picker.css" />
+            <DatePicker fx:id="startDate" layoutX="258.0" layoutY="389.0" prefHeight="26.0" prefWidth="102.0" promptText="Start date..." stylesheets="@../cssStyle/date-picker.css" />
          </children>
       </AnchorPane>
       <AnchorPane layoutY="452.0" prefHeight="132.0" prefWidth="398.0" style="-fx-background-color: #2F2E46; -fx-background-radius: 25;">

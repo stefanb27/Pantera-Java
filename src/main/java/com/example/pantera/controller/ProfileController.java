@@ -75,7 +75,9 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
     @FXML
     private Button friendStatisticsButton;
     @FXML
-    private DatePicker datePicker;
+    private DatePicker startDate;
+    @FXML
+    private DatePicker endDate;
     @FXML
     private ImageView inboxButton;
     @FXML
@@ -109,7 +111,8 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
         firstName.setText(user.getFirstName());
         lastName.setText(user.getLastName());
         friendshipService.addObserver(this);
-        this.datePicker.setValue(LocalDate.now());
+        this.startDate.setValue(LocalDate.now());
+        this.endDate.setValue(LocalDate.now());
         uploadData();
     }
 
@@ -123,18 +126,19 @@ public class ProfileController implements Observer<FriendshipChangeEvent> {
     }
 
     public void handleStatisticsButton() {
-        List<User> users = controllerService.getMyFriendsInGivenDate(this.user, datePicker.getValue());
-        List<Message> privateMessages = controllerService.getConversationsDate(user.getId(), datePicker.getValue());
-        List<Message> groupMessages = controllerService.getGroupConversationsDate(user.getId(), datePicker.getValue());
-        pdfPrinter.printStatisticsForLoggedUser(user, users, privateMessages, groupMessages, datePicker.getValue());
+        List<User> users = controllerService.getMyFriendsInGivenDate(this.user, startDate.getValue(), endDate.getValue());
+        List<Message> privateMessages = controllerService.getConversationsDate(user.getId(), startDate.getValue(), endDate.getValue());
+        List<Message> groupMessages = controllerService.getGroupConversationsDate(user.getId(), startDate.getValue(), endDate.getValue());
+        pdfPrinter.printStatisticsForLoggedUser(user, users, privateMessages, groupMessages, startDate.getValue(), endDate.getValue());
     }
 
     public void handleFriendStatisticsButton() {
         User user1 = listView.getSelectionModel().getSelectedItem();
-        List<Message> messages = controllerService.getConversationsFriendDate(user.getId(), user1.getId(), datePicker.getValue());
-        if (user1 != null)
-            pdfPrinter.printStatisticsForFriendsMessages(user, user1, messages, datePicker.getValue());
-        else {
+        List<Message> messages = controllerService.getConversationsFriendDate(user.getId(), user1.getId(), startDate.getValue(), endDate.getValue());
+        if (user1 != null) {
+            long m = 0L;
+            pdfPrinter.printStatisticsForFriendsMessages(user, user1, messages, startDate.getValue(), endDate.getValue());
+        }else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Select an user!", ButtonType.CANCEL);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.CANCEL) {

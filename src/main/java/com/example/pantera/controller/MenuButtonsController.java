@@ -131,4 +131,42 @@ public class MenuButtonsController {
         }
     }
 
+    public void moveToSignUpController() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/sign-up.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Sign Up");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            SignUpController signUpController = loader.getController();
+            signUpController.setService(dialogStage);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void moveToLogInController() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/views/login.fxml"));
+
+        try {
+            AnchorPane root = loader.load();
+            dialogStage.setTitle("Log in");
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+
+            LogInController logInController = loader.getController();
+            logInController.setService(dialogStage);
+            dialogStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

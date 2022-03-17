@@ -55,9 +55,10 @@ public class LogInController {
 
     @FXML
     private void initialize() {
-        usernameText.setText("john@gmail.com");
-        System.out.println(controllerService.hashPassword("1"));
-        passwordText.setText("1");
+//        usernameText.setText("john@gmail.com");
+//        passwordText.setText("123456");
+//        System.out.println(controllerService.hashPassword("123456"));
+//        System.out.println(controllerService.hashPassword("qwerty"));
     }
 
     public void onLoginButtonClick() {
@@ -89,7 +90,8 @@ public class LogInController {
     }
 
     public void onSignUpButtonClick() {
-
+        MenuButtonsController menuButtonsController = new MenuButtonsController(logInStage, null);
+        menuButtonsController.moveToSignUpController();
     }
 
     public void onForgotPasswordClick() {
